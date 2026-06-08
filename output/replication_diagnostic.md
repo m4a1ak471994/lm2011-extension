@@ -1,7 +1,7 @@
-# LM (2011) replication diagnostic — v2 (post-appendix fixes)
+# Methodology diagnostic — extended sample (1994–2024)
 
 Analysis sample: **83,422 firm-years** / **11,125 unique permnos**.
-Paper targets: **50,115 firm-years / 8,341 firms**.
+LM (2011) in-sample reference: 50,115 firm-years / 8,341 firms.
 
 ## Methodology fixes applied (LM 2011 Internet Appendix)
 - 10-K and 10-K405 only (drop 10-KSB family)
@@ -14,7 +14,7 @@ Paper targets: **50,115 firm-years / 8,341 firms**.
 - Fama-MacBeth quarterly with Newey-West (1 lag) SEs
 
 
-## Table II — descriptive statistics (ours)
+## Table II — descriptive statistics (mine)
 
 ```
                variable     n    mean  median    std      min     max
@@ -29,7 +29,7 @@ Institutional ownership 82475  0.5289  0.5452 0.3050   0.0045  1.1171
            NASDAQ dummy 83422  0.5825  1.0000 0.4931   0.0000  1.0000
 ```
 
-## Table IV — Excess-return regressions, full 10-K (ours)
+## Table IV — Excess-return regressions, full 10-K (mine)
 
 ```
             label  ff48_dummies      sentiment_var    coef     se       t      p     n  n_quarters  adj_r2_avg
@@ -39,7 +39,7 @@ col4_FinNeg_tfidf          True fin_neg_tfidf_full -0.0044 0.0025 -1.7964 0.0724
 col4_FinNeg_tfidf         False fin_neg_tfidf_full -0.0060 0.0023 -2.6144 0.0089 82413         110      0.0212
 ```
 
-## Table V — Excess-return regressions, MD&A only (ours)
+## Table V — Excess-return regressions, MD&A only (mine)
 
 ```
                 label  ff48_dummies     sentiment_var    coef     se       t      p     n  n_quarters  adj_r2_avg

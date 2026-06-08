@@ -1,13 +1,13 @@
-# Event-window robustness (extended sample)
+# Event-window robustness — extended sample (1994–2024)
 
-_Generated 2026-06-02 21:11:27_  
+_Generated 2026-06-07 18:42:32_  
 
-Same Fama-MacBeth quarterly regression as LM (2011) Tables IV/V col (2) and (4),
-re-fit for five different LHS event-windows. Each cell shows `t (adj R²)`.
+Same Fama-MacBeth quarterly regression as in the headline,
+re-fit for three LHS event-windows. Each cell shows `t-stat (adj R²)`.
 The [0,+3] column is LM's canonical 4-day filing-period window.
 
 
-## IV_col2_prop  (LHS scope: full, x = `fin_neg_prop`)
+## Fin-Neg proportional, full 10-K text
 
 | Subperiod (n_qtrs) | n (canonical) | [0,+1] | [0,+3] | [0,+5] |
 |---|---:|---:|---:|---:|
@@ -17,7 +17,7 @@ The [0,+3] column is LM's canonical 4-day filing-period window.
 | covid_recent (6q) | 1,242 | +2.38 (2.58%) | +0.36 (-0.46%) | -0.90 (9.53%) |
 | full (110q) | 82,413 | -0.16 (3.08%) | -1.68 (3.77%) | -1.05 (4.62%) |
 
-## IV_col4_tfidf  (LHS scope: full, x = `fin_neg_tfidf_full`)
+## Fin-Neg tf-idf, full 10-K text
 
 | Subperiod (n_qtrs) | n (canonical) | [0,+1] | [0,+3] | [0,+5] |
 |---|---:|---:|---:|---:|
@@ -27,7 +27,7 @@ The [0,+3] column is LM's canonical 4-day filing-period window.
 | covid_recent (6q) | 1,242 | -0.05 (2.89%) | -2.53 (0.32%) | -2.03 (9.66%) |
 | full (110q) | 82,413 | -1.04 (3.26%) | -1.80 (4.00%) | -1.32 (4.78%) |
 
-## V_col2_prop_MDA  (LHS scope: MDA, x = `fin_neg_prop_mda`)
+## Fin-Neg proportional, MD&A section only
 
 | Subperiod (n_qtrs) | n (canonical) | [0,+1] | [0,+3] | [0,+5] |
 |---|---:|---:|---:|---:|
@@ -37,7 +37,7 @@ The [0,+3] column is LM's canonical 4-day filing-period window.
 | covid_recent (6q) | 1,237 | -0.10 (7.48%) | +1.20 (2.42%) | +1.81 (13.60%) |
 | full (110q) | 79,656 | -2.81 (3.17%) | -3.41 (3.93%) | -2.58 (4.72%) |
 
-## V_col4_tfidf_MDA  (LHS scope: MDA, x = `fin_neg_tfidf_mda`)
+## Fin-Neg tf-idf, MD&A section only
 
 | Subperiod (n_qtrs) | n (canonical) | [0,+1] | [0,+3] | [0,+5] |
 |---|---:|---:|---:|---:|

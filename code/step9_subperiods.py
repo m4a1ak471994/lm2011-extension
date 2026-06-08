@@ -105,31 +105,30 @@ def main() -> None:
     print(f"\nWrote {csv_path.name}")
 
     # Pretty markdown
-    md_lines: list[str] = ["# LM (2011) — Subperiod replication (extended sample)\n"]
+    md_lines: list[str] = ["# Subperiod replication — extended sample (1994–2024)\n"]
     md_lines.append(f"_Generated {time.strftime('%Y-%m-%d %H:%M:%S')}_  \n")
-    md_lines.append("Same Fama-MacBeth quarterly regression as LM (2011) Tables IV and V,")
-    md_lines.append("re-fit on each subperiod independently. FF48 dummies + 1/99 % winsor.")
-    md_lines.append("Bold rows highlight the LM in-sample window for reference.\n")
-    for spec in [
-        "table_IV_col2_FinNeg_prop",
-        "table_IV_col4_FinNeg_tfidf",
-        "table_V_col2_FinNeg_prop_MDA",
-        "table_V_col4_FinNeg_tfidf_MDA",
-    ]:
-        md_lines.append(f"\n## {spec.replace('_', ' ')}\n")
-        md_lines.append("| Subperiod | Years | n | n_qtrs | Fin-Neg coef | SE | t | adj R² |")
+    md_lines.append("Same Fama-MacBeth quarterly regression as in the headline,")
+    md_lines.append("re-fit on each subperiod independently. FF48 dummies + 1/99 % winsor.\n")
+    SPEC_TITLES = {
+        "table_IV_col2_FinNeg_prop":    "Fin-Neg proportional, full 10-K text",
+        "table_IV_col4_FinNeg_tfidf":   "Fin-Neg tf-idf, full 10-K text",
+        "table_V_col2_FinNeg_prop_MDA": "Fin-Neg proportional, MD&A section only",
+        "table_V_col4_FinNeg_tfidf_MDA":"Fin-Neg tf-idf, MD&A section only",
+    }
+    for spec, title in SPEC_TITLES.items():
+        md_lines.append(f"\n## {title}\n")
+        md_lines.append("| Subperiod | Years | n | n_qtrs | Coef | SE | t-stat | adj R² |")
         md_lines.append("|---|---|---:|---:|---:|---:|---:|---:|")
         for _, r in out_df[out_df["spec"] == spec].iterrows():
-            bold = "**" if r["subperiod"] == "LM_in_sample" else ""
             md_lines.append(
-                f"| {bold}{r['subperiod']}{bold} "
-                f"| {bold}{int(r['year_start'])}-{int(r['year_end'])}{bold} "
-                f"| {bold}{int(r['n_obs']):,}{bold} "
-                f"| {bold}{int(r['n_quarters'])}{bold} "
-                f"| {bold}{r['coef']:+.4f}{bold} "
-                f"| {bold}{r['se']:.4f}{bold} "
-                f"| {bold}{r['t']:+.2f}{bold} "
-                f"| {bold}{r['adj_r2_avg']*100:.2f}%{bold} |"
+                f"| {r['subperiod']} "
+                f"| {int(r['year_start'])}-{int(r['year_end'])} "
+                f"| {int(r['n_obs']):,} "
+                f"| {int(r['n_quarters'])} "
+                f"| {r['coef']:+.4f} "
+                f"| {r['se']:.4f} "
+                f"| {r['t']:+.2f} "
+                f"| {r['adj_r2_avg']*100:.2f}% |"
             )
 
     md_path = OUT / "table_subperiods.md"

@@ -117,14 +117,20 @@ def main() -> None:
     print(f"\nWrote {csv_path.name}")
 
     # Pretty markdown: one section per spec, table = subperiod × event_window
-    md_lines: list[str] = ["# Event-window robustness (extended sample)\n"]
+    md_lines: list[str] = ["# Event-window robustness — extended sample (1994–2024)\n"]
     md_lines.append(f"_Generated {time.strftime('%Y-%m-%d %H:%M:%S')}_  \n")
-    md_lines.append("Same Fama-MacBeth quarterly regression as LM (2011) Tables IV/V col (2) and (4),")
-    md_lines.append("re-fit for five different LHS event-windows. Each cell shows `t (adj R²)`.")
+    md_lines.append("Same Fama-MacBeth quarterly regression as in the headline,")
+    md_lines.append("re-fit for three LHS event-windows. Each cell shows `t-stat (adj R²)`.")
     md_lines.append("The [0,+3] column is LM's canonical 4-day filing-period window.\n")
 
+    SPEC_TITLES = {
+        "IV_col2_prop":     "Fin-Neg proportional, full 10-K text",
+        "IV_col4_tfidf":    "Fin-Neg tf-idf, full 10-K text",
+        "V_col2_prop_MDA":  "Fin-Neg proportional, MD&A section only",
+        "V_col4_tfidf_MDA": "Fin-Neg tf-idf, MD&A section only",
+    }
     for spec_name, x_main, df_, doc in SPECS:
-        md_lines.append(f"\n## {spec_name}  (LHS scope: {doc}, x = `{x_main}`)\n")
+        md_lines.append(f"\n## {SPEC_TITLES.get(spec_name, spec_name)}\n")
         sub_df = out_df[out_df["spec"] == spec_name]
         if sub_df.empty:
             md_lines.append("_no rows_")

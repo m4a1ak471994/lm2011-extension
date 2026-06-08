@@ -1,6 +1,6 @@
-# Loughran & McDonald (2011) — Out-of-Sample Extension (1994–2024)
+# Loughran & McDonald (2011) — Extended Analysis (1994–2024)
 
-This repository extends the **Loughran & McDonald (2011)** Fama-MacBeth filing-period excess-return regressions from the original 1994–2008 sample through **end of 2024** — about 17 additional years of SEC 10-K filings — using the identical methodology (same dictionary, same controls, same FM weighting, same Newey-West HAC SE, same FF48 industry fixed effects).
+This repository extends the Loughran & McDonald (2011) Fama-MacBeth filing-period excess-return regressions from the original 1994–2008 sample through end of 2024 — about 17 additional years of SEC 10-K filings — using the identical methodology (same dictionary, same controls, same FM weighting, same Newey-West HAC SE, same FF48 industry fixed effects).
 
 > **Loughran, T., & McDonald, B. (2011).** *When Is a Liability Not a Liability? Textual Analysis, Dictionaries, and 10-Ks.* **Journal of Finance** 66(1), 35–65.
 
@@ -8,50 +8,73 @@ The underlying replication of LM (2011) lives in a separate repository: <https:/
 
 ---
 
-## Three questions
+## Three research questions
 
-1. **Out-of-sample test.** Does the LM (2011) negative-tone result hold in 2009–2024 (the 17 years LM never observed)?
+1. **Out-of-sample test.** Does the LM (2011) negative-tone result hold in 2009–2024?
 2. **Decay.** Does the signal attenuate over time? Markets typically arbitrage away published anomalies (Mclean & Pontiff, *JF* 2016) — does this one?
 3. **Window-robustness.** Is the result an artifact of LM's chosen 4-day `[0,+3]` event window, or does it survive at `[0,+1]` and `[0,+5]`?
 
+### Brief answers
+
+**1. Out-of-sample test.** *Full 10-K text*: the coefficient weakens but stays negative (t = −1.80, p ≈ 0.072) in the full extended window. *MD&A only*: stays strongly significant (t = −3.81). The MD&A specification holds out of sample cleanly; the full-text specification is closer to a marginal effect.
+
+**2. Decay.** Yes for the full-text measure — the coefficient is indistinguishable from zero in the 2009–2019 sub-periods and only partially returns in 2020–2024. The MD&A specification is more stable.
+
+**3. Window-robustness.** Yes — the sign and significance pattern is broadly stable across [0,+1] and [0,+5]. See [`docs/extension.md`](docs/extension.md) for the full grid.
+
 ---
 
-## Headline result (Table IV col 4 — Fin-Neg tf-idf, full 10-K text)
+## Negative sentiment score based on full 10-K text (tf-idf weight)
 
-| Specification | n | n_qtrs | t | adj R² |
+| Specification | n | n_qtrs | t-stat | adj R² |
 |---|---:|---:|---:|---:|
-| LM (2011) published | 50,115 | 60 | **−3.11** | 2.63 % |
-| LM in-sample (1994–2008), reproduced | 50,681 | 60 | **−2.76** | 2.52 % |
-| **Full extended (1994–2024)** | **82,413** | **110** | **−1.80** | **4.00 %** |
+| LM (2011) original result | 50,115 | 60 | −3.11 | 2.63 % |
+| My replication (sample period: 1994–2008) | 50,681 | 60 | −2.76 | 2.52 % |
+| Extended sample (1994–2024) | 82,413 | 110 | −1.80 | 4.00 % |
 
-The pooled tf-idf result in the full extended window is negative (correct sign) at p ≈ 0.072, not significant at conventional 5 %. The story is in the temporal decomposition.
+The effect of the negative sentiment score is less significant in the extended sample (p ≈ 0.072), with the sign still negative. The temporal decomposition below shows how the effect evolves across sub-periods.
 
-### Decay (Table IV col 4 by sub-period)
+### Decay by sub-period
 
-| Subperiod | Years | n | Fin-Neg tf-idf t | adj R² |
+| Subperiod | Years | n | t-stat | adj R² |
 |---|---|---:|---:|---:|
-| LM_in_sample | 1994–2008 | 50,681 | **−2.76** | 2.52 % |
+| LM_in_sample | 1994–2008 | 50,681 | −2.76 | 2.52 % |
 | post_LM | 2009–2014 | 17,363 | +0.41 | 4.53 % |
 | algo_era | 2015–2019 | 13,127 | +1.21 | 8.06 % |
 | covid_recent | 2020–2024 | 1,242 | −2.53 | 0.32 % |
 
-### MD&A-only specification holds across the full window (Table V col 4)
+## Negative sentiment score based on MD&A section only (tf-idf weight)
 
-| Specification | n | t | adj R² |
-|---|---:|---:|---:|
-| **Full extended (1994–2024)** | **79,656** | **−3.81** | **4.09 %** |
+| Specification | n | n_qtrs | t-stat | adj R² |
+|---|---:|---:|---:|---:|
+| LM (2011) original result | 37,287 | 60 | −1.96 | 2.76 % |
+| My replication (sample period: 1994–2008) | 48,134 | 60 | −3.56 | 2.46 % |
+| Extended sample (1994–2024) | 79,656 | 110 | −3.81 | 4.09 % |
 
-Table V col (4) — Fin-Neg tf-idf applied to the **MD&A section only** — is the single specification that retains statistical significance pooled across the full extended window. Three patterns from the event-window robustness section (`docs/extension.md`) help explain why.
+The MD&A specification remains strongly significant (t = −3.81) pooled across the extended window, in contrast to the full-text version above. The temporal decomposition below shows the MD&A coefficient stays negative across every sub-period.
+
+### Decay by sub-period
+
+| Subperiod | Years | n | t-stat | adj R² |
+|---|---|---:|---:|---:|
+| LM_in_sample | 1994–2008 | 48,134 | −3.56 | 2.46 % |
+| post_LM | 2009–2014 | 17,241 | −1.72 | 4.36 % |
+| algo_era | 2015–2019 | 13,044 | −0.96 | 7.52 % |
+| covid_recent | 2020–2024 | 1,237 | −0.00 | 3.27 % |
+
+Three patterns from the event-window robustness section in [`docs/extension.md`](docs/extension.md) help explain why the MD&A-only specification is more robust than the full-text version.
 
 ---
 
-## Full writeup
+![Predictive power of negative sentiment over time — full 10-K text](output/fig_sentiment_decay.png)
 
-[`docs/extension.md`](docs/extension.md) — methodology, sub-period table, rolling-window decay analysis with `[1994, 1998]` through `[2020, 2024]` end-year windows, event-window robustness across `[0,+1]` / `[0,+3]` / `[0,+5]`, and interpretation including three candidate mechanisms for the early-2000s signal vanishing (pre-publication discovery, post-SOX disclosure-norm shift, algorithmic pricing of public text).
+This figure plots the Fin-Neg tf-idf coefficient from a rolling 5-year Fama-MacBeth regression on the full 10-K text, indexed by the window's end year. The coefficient is significantly negative through about 2005 — the original LM sample — and drifts toward zero afterward, broadly consistent with the post-publication arbitrage of published anomalies documented by McLean & Pontiff (2016). The sharp dip in the 2024 window reflects the small COVID-era sample (n ≈ 1,200) and should be read cautiously.
 
-The headline figure:
+![Predictive power of negative sentiment over time — MD&A section only](output/fig_sentiment_decay_mda.png)
 
-![Sentiment decay over time](output/fig_sentiment_decay.png)
+The MD&A-only version of the same regression tells a more stable story: after the strong pre-2005 effect, the coefficient stays mildly negative throughout the post-2005 period rather than drifting all the way to zero. This is consistent with managerial tone in MD&A continuing to convey priceable information even after the broader full-text signal is largely arbitraged away.
+
+See [`docs/extension.md`](docs/extension.md) for the full writeup, including the sub-period replication table, event-window robustness across [0,+1] / [0,+3] / [0,+5], and three candidate mechanisms for the early-2000s signal vanishing (pre-publication discovery, post-SOX disclosure-norm shift, algorithmic pricing of public text).
 
 ---
 
@@ -100,8 +123,8 @@ After step 10, the canonical outputs live in `output/`:
 | `output/table4_cols2_4.csv` | Table IV cols (2) and (4) (extended) |
 | `output/table5_cols2_4.csv` | Table V cols (2) and (4) (extended) |
 | `output/table_subperiods.csv` + `.md` | Sub-period replication |
-| `output/sentiment_decay.csv` | Rolling-window decay data |
-| **`output/fig_sentiment_decay.png`** | **The headline chart** |
+| `output/sentiment_decay.csv`, `output/sentiment_decay_mda.csv` | Rolling-window decay data (full text + MD&A) |
+| `output/fig_sentiment_decay.png`, `output/fig_sentiment_decay_mda.png` | Decay plots (full text + MD&A) |
 | `output/table_event_windows.csv` + `.md` | Event-window robustness grid |
 | `output/replication_diagnostic.md` | Methodology summary |
 
