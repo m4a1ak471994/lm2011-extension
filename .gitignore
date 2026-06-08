@@ -1,0 +1,140 @@
+# =============================================================================
+# .gitignore — Loughran & McDonald (2011) out-of-sample extension
+# =============================================================================
+# This is a public portfolio repo. NO raw 10-K filings, NO WRDS extracts,
+# NO licensed reference data, NO large intermediate artifacts are committed.
+# See DATA.md for what users must obtain locally.
+
+# -----------------------------------------------------------------------------
+# Python
+# -----------------------------------------------------------------------------
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+*.egg
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# -----------------------------------------------------------------------------
+# Environments
+# -----------------------------------------------------------------------------
+.env
+.env.*
+!.env.example
+.venv/
+venv/
+env/
+ENV/
+
+# -----------------------------------------------------------------------------
+# Editors / IDEs
+# -----------------------------------------------------------------------------
+.vscode/
+.idea/
+.claude/
+*.swp
+*.swo
+*~
+~*
+*.stswp
+
+# -----------------------------------------------------------------------------
+# OS
+# -----------------------------------------------------------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# -----------------------------------------------------------------------------
+# Input data (WRDS / SRAF / Ken French / EDGAR raw) — NEVER committed
+# Users build these locally; see input/README.md and DATA.md.
+# -----------------------------------------------------------------------------
+input/*.dta
+input/*.dta.stata_backup
+input/*.csv
+input/*.xlsx
+input/*.zip
+input/*.gz
+input/*.parquet
+input/MasterIndex_*/
+# Ken French's SIC mapping — users fetch from his data library (see DATA.md)
+input/Siccodes48.txt
+!input/README.md
+
+# -----------------------------------------------------------------------------
+# Raw filing corpus (lives outside the repo at D:\Data\10_K_10_Q\ by default;
+# set DATA_ROOT in scripts to override). Typical size: tens to hundreds of GB.
+# -----------------------------------------------------------------------------
+data/
+raw/
+processed/
+filings/
+raw_filings/
+sec_filings/
+10k_filings/
+
+# -----------------------------------------------------------------------------
+# Output — intermediate panels & sparse matrices (regenerable from code)
+# -----------------------------------------------------------------------------
+output/panel.parquet
+output/panel_*.parquet
+output/sample.parquet
+output/filing_word_counts.parquet
+output/filing_to_gvkey_permno.parquet
+output/filing_index.parquet
+output/filing_negword_tf.npz
+output/filing_mdna_negword_tf.npz
+output/neg_word_columns.parquet
+
+# Raw 10-K text spot-check samples (large, regenerable)
+output/mda_samples/
+output/mda_samples/**
+
+# Output: KEPT (committed) — see README.md
+#   output/table1_sample_funnel.csv
+#   output/table2.csv
+#   output/table4_cols2_4.csv
+#   output/table5_cols2_4.csv
+#   output/replication_diagnostic.md
+#   output/table_subperiods.csv  +  .md
+#   output/sentiment_decay.csv
+#   output/fig_sentiment_decay.png
+#   output/table_event_windows.csv  +  .md
+
+# -----------------------------------------------------------------------------
+# Temp / logs / scratch
+# -----------------------------------------------------------------------------
+temp/
+*.log
+*.tmp
+
+# -----------------------------------------------------------------------------
+# Docs — exclude all PDFs (copyrighted journal articles + SRAF docs).
+# DATA.md links to the publishers / SRAF site instead.
+# -----------------------------------------------------------------------------
+docs/*.pdf
+
+# -----------------------------------------------------------------------------
+# Personal notes
+# -----------------------------------------------------------------------------
+Notes.docx
+NOTES.md
+notes.md
+
+# -----------------------------------------------------------------------------
+# Credentials / secrets — defense in depth (should never exist anyway)
+# -----------------------------------------------------------------------------
+*.key
+*.pem
+*.crt
+credentials.json
+secrets.json
+config.private.*
+pgpass.conf
+.pgpass

@@ -1,0 +1,13 @@
+step,rows
+01_EDGAR_10K_10K405_unique,249406
+02_first_filing_per_cik_year,245560
+03_ge_180_days_between_filings,245058
+04_CRSP_PERMNO_match,156784
+05_shrcd_10_11,126672
+06_CRSP_mkt_cap_available,125106
+07_price_ge_3_day_minus_1,107128
+08_returns_volume_event_window,104113
+09_NYSE_AMEX_NASDAQ,104086
+10_ge_60d_pre_AND_post,101589
+11_BM_avail_book_gt_0,96781
+12_Nwords_ge_2000,83422
