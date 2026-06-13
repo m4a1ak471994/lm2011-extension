@@ -1,6 +1,6 @@
 # Loughran & McDonald (2011) — Extended Analysis (1994–2024)
 
-This repository extends the Loughran and McDonald (2011) Fama-MacBeth filing-period excess-return regressions from the original 1994–2008 sample through end of 2024 — about 17 additional years of SEC 10-K filings — using the identical methodology (same dictionary, same controls, same FM weighting, same Newey-West HAC SE, same FF48 industry fixed effects).
+This repository extends the Loughran and McDonald (2011) Fama-MacBeth filing-period excess-return regressions from the original 1994–2008 sample through end of 2024 — about 17 additional years of SEC 10-K filings — using the identical methodology.
 
 > Loughran, Tim, and Bill McDonald, 2011. “When Is a Liability Not a Liability? Textual Analysis, Dictionaries, and 10-Ks”, *Journal of Finance* 66(1): 35–65.
 
