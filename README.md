@@ -11,7 +11,7 @@ The underlying replication of LM (2011) lives in a separate repository: <https:/
 ## Three research questions
 
 1. **Out-of-sample test.** Does the LM (2011) negative-tone result hold in 2009–2024?
-2. **Decay.** Does the signal attenuate over time? Markets typically arbitrage away published anomalies (McLean and Pontiff 2016) — does this one?
+2. **Decay.** Does the signal attenuate over time? Markets typically arbitrage away published anomalies (McLean and Pontiff, 2016) — does this one?
 3. **Window-robustness.** Is the result an artifact of LM's chosen 4-day `[0,+3]` event window, or does it survive at `[0,+1]` and `[0,+5]`?
 
 ### Brief answers
