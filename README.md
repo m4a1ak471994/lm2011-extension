@@ -1,6 +1,6 @@
 # Loughran & McDonald (2011) — Extended Analysis (1994–2024)
 
-This repository extends the Loughran & McDonald (2011) Fama-MacBeth filing-period excess-return regressions from the original 1994–2008 sample through end of 2024 — about 17 additional years of SEC 10-K filings — using the identical methodology (same dictionary, same controls, same FM weighting, same Newey-West HAC SE, same FF48 industry fixed effects).
+This repository extends the Loughran and McDonald (2011) Fama-MacBeth filing-period excess-return regressions from the original 1994–2008 sample through end of 2024 — about 17 additional years of SEC 10-K filings — using the identical methodology (same dictionary, same controls, same FM weighting, same Newey-West HAC SE, same FF48 industry fixed effects).
 
 > Loughran, Tim, and Bill McDonald, 2011. “When Is a Liability Not a Liability? Textual Analysis, Dictionaries, and 10-Ks”, *Journal of Finance* 66(1): 35–65.
 
@@ -11,7 +11,7 @@ The underlying replication of LM (2011) lives in a separate repository: <https:/
 ## Three research questions
 
 1. **Out-of-sample test.** Does the LM (2011) negative-tone result hold in 2009–2024?
-2. **Decay.** Does the signal attenuate over time? Markets typically arbitrage away published anomalies (Mclean & Pontiff, *JF* 2016) — does this one?
+2. **Decay.** Does the signal attenuate over time? Markets typically arbitrage away published anomalies (McLean and Pontiff 2016) — does this one?
 3. **Window-robustness.** Is the result an artifact of LM's chosen 4-day `[0,+3]` event window, or does it survive at `[0,+1]` and `[0,+5]`?
 
 ### Brief answers
@@ -68,7 +68,7 @@ Three patterns from the event-window robustness section in [`docs/extension.md`]
 
 ![Predictive power of negative sentiment over time — full 10-K text](output/fig_sentiment_decay.png)
 
-This figure plots the Fin-Neg tf-idf coefficient from a rolling 5-year Fama-MacBeth regression on the full 10-K text, indexed by the window's end year. The coefficient is significantly negative through about 2005 — the original LM sample — and drifts toward zero afterward, broadly consistent with the post-publication arbitrage of published anomalies documented by McLean & Pontiff (2016). The sharp dip in the 2024 window reflects the small COVID-era sample (n ≈ 1,200) and should be read cautiously.
+This figure plots the Fin-Neg tf-idf coefficient from a rolling 5-year Fama-MacBeth regression on the full 10-K text, indexed by the window's end year. The coefficient is significantly negative through about 2005 — the original LM sample — and drifts toward zero afterward, broadly consistent with the post-publication arbitrage of published anomalies documented by McLean and Pontiff (2016). The sharp dip in the 2024 window reflects the small COVID-era sample (n ≈ 1,200) and should be read cautiously.
 
 ![Predictive power of negative sentiment over time — MD&A section only](output/fig_sentiment_decay_mda.png)
 
@@ -166,7 +166,7 @@ One small refinement was added: inline-XBRL `<ix:hidden>` blocks (which wrap con
 ## Skills demonstrated
 
 - **NLP / textual analysis**: dictionary-based sentiment scoring on a 30+ year corpus of ~290 k SEC 10-K filings; inline-XBRL handling; MD&A section extraction; tf-idf weighting with corpus-wide idf.
-- **Empirical asset pricing**: Fama-MacBeth quarterly cross-sectional regressions with frequency weighting and Newey-West HAC standard errors; **rolling-window FM with backward-looking 5-year windows**; event-window robustness across multiple CAR horizons; sub-period decomposition for post-publication-decay testing à la McLean & Pontiff (2016).
+- **Empirical asset pricing**: Fama-MacBeth quarterly cross-sectional regressions with frequency weighting and Newey-West HAC standard errors; **rolling-window FM with backward-looking 5-year windows**; event-window robustness across multiple CAR horizons; sub-period decomposition for post-publication-decay testing à la McLean and Pontiff (2016).
 - **WRDS / financial databases**: SQL queries via the Python `wrds` package across CRSP daily/monthly, Compustat fundamentals, the CCM link table, Thomson Reuters 13F, and Fama-French factors — extended through end of 2024.
 - **Reproducible research**: full numbered pipeline (`preclean → step1c → step3 → step4 → step5 → step6 → step7 → step9 → step10 → step11`), all parameters explicit, every figure backed by a CSV the reader can reproduce.
 

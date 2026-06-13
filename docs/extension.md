@@ -1,6 +1,6 @@
 # Out-of-sample extension of LM (2011) — 1994–2024
 
-This document extends the Loughran & McDonald (2011) Fama-MacBeth filing-period excess-return regressions from the LM in-sample window (1994–2008) through end of 2024 (~17 additional years of 10-K filings), using the identical methodology (same dictionary, same controls, same FM weighting, same Newey-West HAC SE, same FF48 industry fixed effects).
+This document extends the Loughran and McDonald (2011) Fama-MacBeth filing-period excess-return regressions from the LM in-sample window (1994–2008) through end of 2024 (~17 additional years of 10-K filings), using the identical methodology (same dictionary, same controls, same FM weighting, same Newey-West HAC SE, same FF48 industry fixed effects).
 
 The exposition below focuses on the per-filing negative sentiment score based on the LM (2011) financial sentiment dictionary (hereinafter referred to as **Fin-Neg**). The headline specification is the tf-idf-weighted version of Fin-Neg, which weights each negative-tone word by its inverse document frequency across the corpus — the richer of the two LM specifications; the alternative is an unweighted proportional version (negative-word count divided by total words). Each analysis is reported in two parallel versions: one on the full 10-K text and one restricted to the MD&A section only. Results for the unweighted proportional Fin-Neg are reported alongside in the companion tables without separate discussion.
 
@@ -255,7 +255,7 @@ Two qualitatively different stories emerge from the rolling-window decomposition
 - end years 2000–2004 (windows covering filings 1996–2000 through 2000–2004), with t between −2.69 and −3.32 and R² between 1.71 % and 4.10 %, and
 - the lone end year 2024 (window 2020–2024), with t = −2.53 / R² = 0.32 % on n = 1,242.
 
-In all other rolling windows the coefficient is near zero with t between −1.0 and +1.2. The classical post-publication-arbitrage explanation (McLean & Pontiff 2016) cannot account for this pattern alone: the rolling-window coefficient drifts to zero by end year 2006 (window 2002–2006), which corresponds to filings made well before Loughran & McDonald (2011) was published in early 2011. Three non-exclusive candidate mechanisms are worth flagging without a clean test of any of them:
+In all other rolling windows the coefficient is near zero with t between −1.0 and +1.2. The classical post-publication-arbitrage explanation (McLean and Pontiff 2016) cannot account for this pattern alone: the rolling-window coefficient drifts to zero by end year 2006 (window 2002–2006), which corresponds to filings made well before Loughran and McDonald (2011) was published in early 2011. Three non-exclusive candidate mechanisms are worth flagging without a clean test of any of them:
 
 1. **Pre-publication discovery.** Tetlock (2007, *JF*) used the Harvard IV-4 dictionary on Wall Street Journal media content. Practitioner sentiment scoring of news + filings (Reuters, Bloomberg, RavenPack) was deployed in the same window. Filing-period negative-tone may have been priced by sentiment-active quants before LM curated their finance-specific dictionary.
 
