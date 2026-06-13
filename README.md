@@ -2,7 +2,7 @@
 
 This repository extends the Loughran & McDonald (2011) Fama-MacBeth filing-period excess-return regressions from the original 1994–2008 sample through end of 2024 — about 17 additional years of SEC 10-K filings — using the identical methodology (same dictionary, same controls, same FM weighting, same Newey-West HAC SE, same FF48 industry fixed effects).
 
-> **Loughran, T., & McDonald, B. (2011).** *When Is a Liability Not a Liability? Textual Analysis, Dictionaries, and 10-Ks.* **Journal of Finance** 66(1), 35–65.
+> Loughran, Tim, and Bill McDonald, 2011. “When Is a Liability Not a Liability? Textual Analysis, Dictionaries, and 10-Ks”, *Journal of Finance* 66(1): 35–65.
 
 The underlying replication of LM (2011) lives in a separate repository: <https://github.com/m4a1ak471994/lm2011-replication>. The extension here re-runs the same pipeline on a wider window and adds two new analyses: a rolling-window decay decomposition and an event-window robustness grid.
 
@@ -182,9 +182,9 @@ One small refinement was added: inline-XBRL `<ix:hidden>` blocks (which wrap con
 
 ## References
 
-- **Paper**: Loughran, T., & McDonald, B. (2011). *When Is a Liability Not a Liability? Textual Analysis, Dictionaries, and 10-Ks.* **Journal of Finance** 66(1), 35–65. DOI: [10.1111/j.1540-6261.2010.01625.x](https://doi.org/10.1111/j.1540-6261.2010.01625.x)
-- **Post-publication decay**: McLean, R. D., & Pontiff, J. (2016). *Does Academic Research Destroy Stock Return Predictability?* **Journal of Finance** 71(1), 5–32.
-- **Textual analysis in finance, pre-LM**: Tetlock, P. C. (2007). *Giving Content to Investor Sentiment: The Role of Media in the Stock Market.* **Journal of Finance** 62(3), 1139–1168.
+- **Paper**: Loughran, Tim, and Bill McDonald, 2011. “When Is a Liability Not a Liability? Textual Analysis, Dictionaries, and 10-Ks”, *Journal of Finance* 66(1): 35–65. DOI: [10.1111/j.1540-6261.2010.01625.x](https://doi.org/10.1111/j.1540-6261.2010.01625.x)
+- **Post-publication decay**: McLean, R. D., and Jeffrey Pontiff, 2016. “Does Academic Research Destroy Stock Return Predictability?”, *Journal of Finance* 71(1): 5–32.
+- **Textual analysis in finance, pre-LM**: Tetlock, Paul C., 2007. “Giving Content to Investor Sentiment: The Role of Media in the Stock Market”, *Journal of Finance* 62(3): 1139–1168.
 - **Upstream LM (2011) replication**: <https://github.com/m4a1ak471994/lm2011-replication>
 - **SRAF data + dictionary**: <https://sraf.nd.edu/sec-edgar-data/>
 
