@@ -1,4 +1,4 @@
-# Loughran & McDonald (2011) — Extended Analysis (1994–2024)
+# Loughran and McDonald (2011) — Extended Analysis (1994–2024)
 
 This repository extends the Loughran and McDonald (2011) Fama-MacBeth filing-period excess-return regressions from the original 1994–2008 sample through end of 2024 — about 17 additional years of SEC 10-K filings — using the identical methodology.
 
