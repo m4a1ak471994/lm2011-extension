@@ -159,16 +159,7 @@ After step 10, the canonical outputs live in `output/`:
 
 The extension uses the identical Fama-MacBeth pipeline as LM (2011) and the upstream replication (<https://github.com/m4a1ak471994/lm2011-replication>) — same dictionary, same controls, same per-quarter cross-sectional regression, same n_obs-weighted time-series average, same Newey-West HAC (1 lag) standard errors, same FF48 industry fixed effects in every quarterly cross-section. Only the date window of WRDS extracts and the filings manifest were widened.
 
-One small refinement was added: inline-XBRL `<ix:hidden>` blocks (which wrap content tagged for machine readers but not visible to humans) are stripped before tokenization. Empirically the change shifts every coefficient by less than 0.5 % — small — but the fix is principled. See `docs/extension.md` for details.
-
----
-
-## Skills demonstrated
-
-- **NLP / textual analysis**: dictionary-based sentiment scoring on a 30+ year corpus of ~290 k SEC 10-K filings; inline-XBRL handling; MD&A section extraction; tf-idf weighting with corpus-wide idf.
-- **Empirical asset pricing**: Fama-MacBeth quarterly cross-sectional regressions with frequency weighting and Newey-West HAC standard errors; **rolling-window FM with backward-looking 5-year windows**; event-window robustness across multiple CAR horizons; sub-period decomposition for post-publication-decay testing à la McLean and Pontiff (2016).
-- **WRDS / financial databases**: SQL queries via the Python `wrds` package across CRSP daily/monthly, Compustat fundamentals, the CCM link table, Thomson Reuters 13F, and Fama-French factors — extended through end of 2024.
-- **Reproducible research**: full numbered pipeline (`preclean → step1c → step3 → step4 → step5 → step6 → step7 → step9 → step10 → step11`), all parameters explicit, every figure backed by a CSV the reader can reproduce.
+One small refinement was added: inline-XBRL `<ix:hidden>` blocks (which wrap content tagged for machine readers but not visible to humans) are stripped before tokenization. Empirically the change shifts every coefficient by less than 0.5 %. See `docs/extension.md` for details.
 
 ---
 
