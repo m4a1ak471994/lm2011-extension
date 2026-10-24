@@ -30,10 +30,19 @@ DOC_BLOCK_RE = re.compile(
 )
 
 # Binary / non-text blocks inside <TEXT>…</TEXT> we should drop wholesale.
+# <XBRL> is NOT in this list: in inline-XBRL filings (2016 onward) the primary
+# 10-K document itself is wrapped in <XBRL>...</XBRL>, so deleting the block
+# deleted the whole report. Its tags are removed by the general tag strip; the
+# machine-only inline-XBRL header is removed by IX_HEADER_RE below.
 BIN_BLOCK_RE = re.compile(
-    r"<(PDF|GRAPHIC|ZIP|EXCEL|JSON|XML|XBRL)>.*?</\1>",
+    r"<(PDF|GRAPHIC|ZIP|EXCEL|JSON|XML)>.*?</\1>",
     re.IGNORECASE | re.DOTALL,
 )
+
+# Inline-XBRL header: <ix:header> holds hidden facts, contexts and units for
+# machine readers and is not rendered to humans.
+IX_HEADER_RE = re.compile(r"<ix:header\b[^>]*>.*?</ix:header>",
+                          re.IGNORECASE | re.DOTALL)
 
 # Encoded uuencode/base64 streams (older filings embed images this way).
 UU_RE = re.compile(r"begin\s+\d{3}\s+\S+\n.*?\nend\s*\n", re.DOTALL)
@@ -125,7 +134,8 @@ def clean_text(raw: str) -> str:
         return ""
     body = m.group("body")
 
-    # 2. Remove binary subdocuments and uuencode streams (covers encoded graphics).
+    # 2. Remove the inline-XBRL header, binary subdocuments and uuencode streams.
+    body = IX_HEADER_RE.sub(" ", body)
     body = BIN_BLOCK_RE.sub(" ", body)
     body = UU_RE.sub(" ", body)
 

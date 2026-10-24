@@ -16,7 +16,7 @@ The underlying replication of LM (2011) lives in a separate repository: <https:/
 
 ### Brief answers
 
-**1. Out-of-sample test.** *Full 10-K text*: the coefficient weakens but stays negative (t = −1.80, p ≈ 0.072) in the full extended window. *MD&A only*: stays strongly significant (t = −3.81). The MD&A specification holds out of sample cleanly; the full-text specification is closer to a marginal effect.
+**1. Out-of-sample test.** *Full 10-K text*: the coefficient weakens but stays negative (t = −1.83, p ≈ 0.068) in the full extended window. *MD&A only*: stays strongly significant (t = −3.97). The MD&A specification holds out of sample cleanly; the full-text specification is closer to a marginal effect.
 
 **2. Decay.** Yes for the full-text measure — the coefficient is indistinguishable from zero in the 2009–2019 sub-periods and only partially returns in 2020–2024. The MD&A specification is more stable.
 
@@ -29,19 +29,19 @@ The underlying replication of LM (2011) lives in a separate repository: <https:/
 | Specification | n | n_qtrs | t-stat | adj R² |
 |---|---:|---:|---:|---:|
 | LM (2011) original result | 50,115 | 60 | −3.11 | 2.63 % |
-| My replication (sample period: 1994–2008) | 50,681 | 60 | −2.76 | 2.52 % |
-| Extended sample (1994–2024) | 82,413 | 110 | −1.80 | 4.00 % |
+| My replication (sample period: 1994–2008) | 50,681 | 60 | −2.74 | 2.52 % |
+| Extended sample (1994–2024) | 95,210 | 123 | −1.83 | 3.91 % |
 
-The effect of the negative sentiment score is less significant in the extended sample (p ≈ 0.072), with the sign still negative. The temporal decomposition below shows how the effect evolves across sub-periods.
+The effect of the negative sentiment score is less significant in the extended sample (p ≈ 0.068), with the sign still negative. The temporal decomposition below shows how the effect evolves across sub-periods.
 
 ### Decay by sub-period
 
 | Subperiod | Years | n | t-stat | adj R² |
 |---|---|---:|---:|---:|
-| LM_in_sample | 1994–2008 | 50,681 | −2.76 | 2.52 % |
+| LM_in_sample | 1994–2008 | 50,681 | −2.74 | 2.52 % |
 | post_LM | 2009–2014 | 17,363 | +0.41 | 4.53 % |
-| algo_era | 2015–2019 | 13,127 | +1.21 | 8.06 % |
-| covid_recent | 2020–2024 | 1,242 | −2.53 | 0.32 % |
+| algo_era | 2015–2019 | 13,525 | +1.20 | 7.78 % |
+| covid_recent | 2020–2024 | 13,641 | −1.48 | 3.51 % |
 
 ## Negative sentiment score based on MD&A section only (tf-idf weight)
 
@@ -49,28 +49,28 @@ The effect of the negative sentiment score is less significant in the extended s
 |---|---:|---:|---:|---:|
 | LM (2011) original result | 37,287 | 60 | −1.96 | 2.76 % |
 | My replication (sample period: 1994–2008) | 48,134 | 60 | −3.56 | 2.46 % |
-| Extended sample (1994–2024) | 79,656 | 110 | −3.81 | 4.09 % |
+| Extended sample (1994–2024) | 92,369 | 123 | −3.97 | 3.76 % |
 
-The MD&A specification remains strongly significant (t = −3.81) pooled across the extended window, in contrast to the full-text version above. The temporal decomposition below shows the MD&A coefficient stays negative across every sub-period.
+The MD&A specification remains strongly significant (t = −3.97) pooled across the extended window, in contrast to the full-text version above. The temporal decomposition below shows the MD&A coefficient stays negative across every sub-period.
 
 ### Decay by sub-period
 
 | Subperiod | Years | n | t-stat | adj R² |
 |---|---|---:|---:|---:|
 | LM_in_sample | 1994–2008 | 48,134 | −3.56 | 2.46 % |
-| post_LM | 2009–2014 | 17,241 | −1.72 | 4.36 % |
-| algo_era | 2015–2019 | 13,044 | −0.96 | 7.52 % |
-| covid_recent | 2020–2024 | 1,237 | −0.00 | 3.27 % |
+| post_LM | 2009–2014 | 17,241 | −1.73 | 4.36 % |
+| algo_era | 2015–2019 | 13,441 | −0.51 | 7.55 % |
+| covid_recent | 2020–2024 | 13,553 | −1.23 | 3.19 % |
 
 Three patterns from the event-window robustness section in [`docs/extension.md`](docs/extension.md) help explain why the MD&A-only specification is more robust than the full-text version.
 
 ---
 
-![Predictive power of negative sentiment over time — full 10-K text](output/fig_sentiment_decay.png)
+![Predictive power of negative sentiment over time — full 10-K text](output/data_tables_figures/fig_sentiment_decay.png)
 
-This figure plots the Fin-Neg tf-idf coefficient from a rolling 5-year Fama-MacBeth regression on the full 10-K text, indexed by the window's end year. The coefficient is significantly negative through about 2005 — the original LM sample — and drifts toward zero afterward, broadly consistent with the post-publication arbitrage of published anomalies documented by McLean and Pontiff (2016). The sharp dip in the 2024 window reflects the small COVID-era sample (n ≈ 1,200) and should be read cautiously.
+This figure plots the Fin-Neg tf-idf coefficient from a rolling 5-year Fama-MacBeth regression on the full 10-K text, indexed by the window's end year. The coefficient is significantly negative through about 2005 — the original LM sample — and drifts toward zero afterward, broadly consistent with the post-publication arbitrage of published anomalies documented by McLean and Pontiff (2016).
 
-![Predictive power of negative sentiment over time — MD&A section only](output/fig_sentiment_decay_mda.png)
+![Predictive power of negative sentiment over time — MD&A section only](output/data_tables_figures/fig_sentiment_decay_mda.png)
 
 The MD&A-only version of the same regression tells a more stable story: after the strong pre-2005 effect, the coefficient stays mildly negative throughout the post-2005 period rather than drifting all the way to zero. This is consistent with managerial tone in MD&A continuing to convey priceable information even after the broader full-text signal is largely arbitraged away.
 
@@ -118,14 +118,14 @@ After step 10, the canonical outputs live in `output/`:
 
 | File | What it is |
 |---|---|
-| `output/table1_sample_funnel.csv` | Sample funnel (extended) |
-| `output/table2.csv` | Descriptive stats (extended) |
-| `output/table4_cols2_4.csv` | Table IV cols (2) and (4) (extended) |
-| `output/table5_cols2_4.csv` | Table V cols (2) and (4) (extended) |
-| `output/table_subperiods.csv` + `.md` | Sub-period replication |
-| `output/sentiment_decay.csv`, `output/sentiment_decay_mda.csv` | Rolling-window decay data (full text + MD&A) |
-| `output/fig_sentiment_decay.png`, `output/fig_sentiment_decay_mda.png` | Decay plots (full text + MD&A) |
-| `output/table_event_windows.csv` + `.md` | Event-window robustness grid |
+| `output/data_tables_figures/table1_sample_funnel.csv` | Sample funnel (extended) |
+| `output/data_tables_figures/table2.csv` | Descriptive stats (extended) |
+| `output/data_tables_figures/table4_cols2_4.csv` | Table IV cols (2) and (4) (extended) |
+| `output/data_tables_figures/table5_cols2_4.csv` | Table V cols (2) and (4) (extended) |
+| `output/data_tables_figures/table_subperiods.csv` + `output/table_subperiods.md` | Sub-period replication |
+| `output/data_tables_figures/sentiment_decay.csv`, `output/data_tables_figures/sentiment_decay_mda.csv` | Rolling-window decay data (full text + MD&A) |
+| `output/data_tables_figures/fig_sentiment_decay.png`, `output/data_tables_figures/fig_sentiment_decay_mda.png` | Decay plots (full text + MD&A) |
+| `output/data_tables_figures/table_event_windows.csv` + `output/table_event_windows.md` | Event-window robustness grid |
 | `output/replication_diagnostic.md` | Methodology summary |
 
 ---
@@ -176,7 +176,7 @@ One small refinement was added: inline-XBRL `<ix:hidden>` blocks (which wrap con
 
 - **Data licensing**: CRSP, Compustat, and Thomson Reuters 13F require WRDS access. The Loughran-McDonald Master Dictionary is freely available from [SRAF](https://sraf.nd.edu/loughranmcdonald-master-dictionary/). See [`DATA.md`](DATA.md).
 - **Compute**: full pipeline takes ~3 hours on residential broadband (~2 hr WRDS pulls + ~75 min step4 + a few minutes for everything else). The raw 10-K corpus is ~70 GB on disk.
-- **CRSP daily cutoff**: WRDS CRSP daily ends 2024-12-31, so the [+252] post-window required by LM Table I funnel filter (10) drops most filings filed in late 2023 onward. The `covid_recent` sub-period (2020–2024) has only 1,367 firm-years for this reason.
+- **CRSP daily cutoff**: WRDS CRSP daily ends 2024-12-31, so the post-window required by LM Table I funnel filter (10) drops filings from the final weeks of 2024.
 
 ---
 

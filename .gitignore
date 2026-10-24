@@ -97,15 +97,15 @@ output/mda_samples/
 output/mda_samples/**
 
 # Output: KEPT (committed) — see README.md
-#   output/table1_sample_funnel.csv
-#   output/table2.csv
-#   output/table4_cols2_4.csv
-#   output/table5_cols2_4.csv
+#   output/data_tables_figures/table1_sample_funnel.csv
+#   output/data_tables_figures/table2.csv
+#   output/data_tables_figures/table4_cols2_4.csv
+#   output/data_tables_figures/table5_cols2_4.csv
 #   output/replication_diagnostic.md
-#   output/table_subperiods.csv  +  .md
-#   output/sentiment_decay.csv
-#   output/fig_sentiment_decay.png
-#   output/table_event_windows.csv  +  .md
+#   output/data_tables_figures/table_subperiods.csv  +  output/table_subperiods.md
+#   output/data_tables_figures/sentiment_decay.csv
+#   output/data_tables_figures/fig_sentiment_decay.png
+#   output/data_tables_figures/table_event_windows.csv  +  output/table_event_windows.md
 
 # -----------------------------------------------------------------------------
 # Temp / logs / scratch
@@ -138,3 +138,6 @@ secrets.json
 config.private.*
 pgpass.conf
 .pgpass
+
+# Local handoff context (not for the public repo)
+agent_context.txt

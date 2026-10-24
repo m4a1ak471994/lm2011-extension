@@ -18,7 +18,7 @@ on Fin-Neg proportional and Fin-Neg tf-idf, with the LM control set
 
 Inputs : output/panel.parquet  (built by step6 on the extended sample)
 Outputs:
-    output/table_subperiods.csv             # one row per (subperiod × sentiment_var)
+    output/data_tables_figures/table_subperiods.csv             # one row per (subperiod × sentiment_var)
     output/table_subperiods.md              # pretty-printed markdown summary
 """
 from __future__ import annotations
@@ -32,6 +32,8 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "output"
+DATA = OUT / "data_tables_figures"   # final tables + figures
+DATA.mkdir(parents=True, exist_ok=True)
 
 sys.path.insert(0, str(Path(__file__).parent))
 from step7_tables import fit_one  # noqa: E402  (use same fit + winsorize logic)
@@ -100,7 +102,7 @@ def main() -> None:
             })
 
     out_df = pd.DataFrame(rows)
-    csv_path = OUT / "table_subperiods.csv"
+    csv_path = DATA / "table_subperiods.csv"
     out_df.to_csv(csv_path, index=False)
     print(f"\nWrote {csv_path.name}")
 

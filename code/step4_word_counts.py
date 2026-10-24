@@ -89,12 +89,22 @@ def process_one(arg: tuple) -> dict:
     accession, form_type, year, cik = arg
     path = (DATA_ROOT / "raw" / "10K" / str(year) / f"{int(cik)}_{accession}.txt.gz")
     if not path.exists():
-        return {"accession": accession, "ok": False, "error": "file_missing"}
+        return {"accession": accession, "ok": False, "parse_status": "file_missing",
+                "error": "file_missing"}
     try:
         with gzip.open(path, "rb") as fh:
             raw = fh.read().decode("latin-1", errors="replace")
         cleaned = mx.clean_text(raw)
         n_w, n_n, n_p, neg_full = count_text(cleaned)
+        # parse_status separates unsupported forms from parse failures of an
+        # eligible primary 10-K, so an empty report is never reported as ok.
+        if mx.DOC10K_RE.search(raw) is None:
+            parse_status = ("no_primary_10k" if str(form_type).upper().replace("-", "")
+                            in ("10K", "10K405") else "unsupported_form")
+        elif n_w == 0:
+            parse_status = "empty_primary"
+        else:
+            parse_status = "ok"
 
         mdna_text, mdna_status = mx.extract_mdna(cleaned, form_type=form_type)
         if mdna_text:
@@ -109,7 +119,7 @@ def process_one(arg: tuple) -> dict:
             "n_words_mda": m_w, "n_neg_mda": m_n, "n_pos_mda": m_p,
             "mdna_status": mdna_status,
             "neg_full": neg_full, "neg_mda": neg_mda,
-            "ok": True, "error": "",
+            "ok": parse_status == "ok", "parse_status": parse_status, "error": "",
         }
     except Exception as e:  # noqa: BLE001
         return {"accession": accession, "ok": False,

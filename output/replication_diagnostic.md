@@ -1,6 +1,6 @@
 # Methodology diagnostic — extended sample (1994–2024)
 
-Analysis sample: **83,422 firm-years** / **11,125 unique permnos**.
+Analysis sample: **96,331 firm-years** / **11,968 unique permnos**.
 LM (2011) in-sample reference: 50,115 firm-years / 8,341 firms.
 
 ## Methodology fixes applied (LM 2011 Internet Appendix)
@@ -17,36 +17,36 @@ LM (2011) in-sample reference: 50,115 firm-years / 8,341 firms.
 ## Table II — descriptive statistics (mine)
 
 ```
-               variable     n    mean  median    std      min     max
-                Fin-Neg 83422  1.5620  1.5653 0.5385   0.4232  2.9826
-                Fin-Pos 83422  0.7202  0.7061 0.1978   0.2715  1.3308
-Excess return [0,3] (%) 83422 -0.1871 -0.1825 6.2528 -21.6128 20.9435
-              Size ($B) 83422  3.1883  0.4235 9.6376   0.0129 71.6897
-         Book-to-market 83422  0.6232  0.5237 0.4568   0.0365  2.5181
- Turnover (pre, median) 83403  1.5147  0.9980 1.6075   0.0471  9.0132
-1-yr pre-event FF alpha 83422  0.1119  0.0689 0.4488  -0.9834  1.8376
-Institutional ownership 82475  0.5289  0.5452 0.3050   0.0045  1.1171
-           NASDAQ dummy 83422  0.5825  1.0000 0.4931   0.0000  1.0000
+               variable     n    mean  median     std      min     max
+                Fin-Neg 96331  1.6398  1.6494  0.5590   0.4374  3.0448
+                Fin-Pos 96331  0.7318  0.7175  0.1970   0.2824  1.3281
+Excess return [0,3] (%) 96331 -0.2060 -0.2006  6.5713 -22.5267 22.4913
+              Size ($B) 96331  4.1270  0.5114 12.6704   0.0133 94.4409
+         Book-to-market 96331  0.6152  0.5128  0.4595   0.0315  2.5232
+ Turnover (pre, median) 96312  1.6359  1.1111  1.7587   0.0503 10.5462
+1-yr pre-event FF alpha 96331  0.1047  0.0631  0.4460  -0.9943  1.8197
+Institutional ownership 95232  0.5543  0.5850  0.3067   0.0053  1.1183
+           NASDAQ dummy 96331  0.5810  1.0000  0.4934   0.0000  1.0000
 ```
 
 ## Table IV — Excess-return regressions, full 10-K (mine)
 
 ```
             label  ff48_dummies      sentiment_var    coef     se       t      p     n  n_quarters  adj_r2_avg
- col2_FinNeg_prop          True       fin_neg_prop -0.1245 0.0742 -1.6769 0.0936 82413         110      0.0377
-col4_FinNeg_tfidf          True fin_neg_tfidf_full -0.0044 0.0025 -1.7964 0.0724 82413         110      0.0400
- col2_FinNeg_prop         False       fin_neg_prop -0.1801 0.0657 -2.7413 0.0061 82413         110      0.0194
-col4_FinNeg_tfidf         False fin_neg_tfidf_full -0.0060 0.0023 -2.6144 0.0089 82413         110      0.0212
+ col2_FinNeg_prop          True       fin_neg_prop -0.1262 0.0680 -1.8573 0.0633 95210         123      0.0371
+col4_FinNeg_tfidf          True fin_neg_tfidf_full -0.0046 0.0025 -1.8253 0.0680 95210         123      0.0391
+ col2_FinNeg_prop         False       fin_neg_prop -0.1946 0.0641 -3.0355 0.0024 95210         123      0.0168
+col4_FinNeg_tfidf         False fin_neg_tfidf_full -0.0066 0.0023 -2.8654 0.0042 95210         123      0.0179
 ```
 
 ## Table V — Excess-return regressions, MD&A only (mine)
 
 ```
                 label  ff48_dummies     sentiment_var    coef     se       t      p     n  n_quarters  adj_r2_avg
- col2_FinNeg_prop_MDA          True  fin_neg_prop_mda -0.1553 0.0456 -3.4089 0.0007 79656         110      0.0393
-col4_FinNeg_tfidf_MDA          True fin_neg_tfidf_mda -0.0108 0.0028 -3.8078 0.0001 79656         110      0.0409
- col2_FinNeg_prop_MDA         False  fin_neg_prop_mda -0.1835 0.0454 -4.0464 0.0001 79656         110      0.0203
-col4_FinNeg_tfidf_MDA         False fin_neg_tfidf_mda -0.0112 0.0030 -3.7258 0.0002 79656         110      0.0202
+ col2_FinNeg_prop_MDA          True  fin_neg_prop_mda -0.1159 0.0470 -2.4635 0.0138 92369         123      0.0374
+col4_FinNeg_tfidf_MDA          True fin_neg_tfidf_mda -0.0108 0.0027 -3.9724 0.0001 92369         123      0.0376
+ col2_FinNeg_prop_MDA         False  fin_neg_prop_mda -0.1248 0.0487 -2.5634 0.0104 92369         123      0.0179
+col4_FinNeg_tfidf_MDA         False fin_neg_tfidf_mda -0.0113 0.0029 -3.9461 0.0001 92369         123      0.0175
 ```
 
 ## LM (2011) reported reference values

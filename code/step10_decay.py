@@ -12,10 +12,10 @@ Two parallel specifications are run:
 
 Inputs : output/panel.parquet (built by step6 on extended sample)
 Outputs:
-    output/sentiment_decay.csv               # full-text rolling-window stats
-    output/sentiment_decay_mda.csv           # MD&A rolling-window stats
-    output/fig_sentiment_decay.png           # full-text decay plot
-    output/fig_sentiment_decay_mda.png       # MD&A decay plot
+    output/data_tables_figures/sentiment_decay.csv               # full-text rolling-window stats
+    output/data_tables_figures/sentiment_decay_mda.csv           # MD&A rolling-window stats
+    output/data_tables_figures/fig_sentiment_decay.png           # full-text decay plot
+    output/data_tables_figures/fig_sentiment_decay_mda.png       # MD&A decay plot
 """
 from __future__ import annotations
 
@@ -29,6 +29,8 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "output"
+DATA = OUT / "data_tables_figures"   # final tables + figures
+DATA.mkdir(parents=True, exist_ok=True)
 
 sys.path.insert(0, str(Path(__file__).parent))
 from step7_tables import fit_one  # noqa: E402
@@ -98,7 +100,7 @@ def run_spec(p_full: pd.DataFrame, spec: dict) -> None:
                   f"adj_R2={res['adj_r2_avg']*100:.2f}%")
 
     out_df = pd.DataFrame(rows)
-    csv_path = OUT / spec["csv_name"]
+    csv_path = DATA / spec["csv_name"]
     out_df.to_csv(csv_path, index=False)
     print(f"  Wrote {csv_path.name}")
 
@@ -132,7 +134,7 @@ def run_spec(p_full: pd.DataFrame, spec: dict) -> None:
         ax.grid(True, alpha=0.25)
         ax.legend(loc="lower right", framealpha=0.92)
         plt.tight_layout()
-        png_path = OUT / spec["png_name"]
+        png_path = DATA / spec["png_name"]
         plt.savefig(png_path, dpi=150)
         print(f"  Wrote {png_path.name}")
         plt.close(fig)

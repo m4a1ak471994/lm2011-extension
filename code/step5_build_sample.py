@@ -23,7 +23,7 @@ Inputs:
 Outputs:
   - output/filing_to_gvkey_permno.parquet
   - output/sample.parquet
-  - output/table1_sample_funnel.csv
+  - output/data_tables_figures/table1_sample_funnel.csv
 """
 
 from __future__ import annotations
@@ -42,6 +42,8 @@ ROOT = Path(r"D:\lm2011-extension")
 DATA_ROOT = Path(r"D:\Data\10_K_10_Q")
 INP = ROOT / "input"
 OUT = ROOT / "output"
+DATA = OUT / "data_tables_figures"   # final tables + figures
+DATA.mkdir(parents=True, exist_ok=True)
 OUT.mkdir(parents=True, exist_ok=True)
 
 MAN = Path(os.environ.get(
@@ -415,7 +417,7 @@ def main() -> None:
 
     # Write outputs (per-run-tag funnel CSV, single sample.parquet).
     sample.to_parquet(OUT / "sample.parquet", index=False)
-    funnel_path = OUT / f"table1_sample_funnel_{run_tag}.csv"
+    funnel_path = DATA / f"table1_sample_funnel_{run_tag}.csv"
     try:
         pd.DataFrame(funnel, columns=["step", "rows"]).to_csv(funnel_path, index=False)
         print(f"  Wrote {funnel_path.name}")
@@ -424,7 +426,7 @@ def main() -> None:
     # Also write a generic copy for backward compatibility
     try:
         pd.DataFrame(funnel, columns=["step", "rows"]).to_csv(
-            OUT / "table1_sample_funnel.csv", index=False)
+            DATA / "table1_sample_funnel.csv", index=False)
     except PermissionError:
         pass
 

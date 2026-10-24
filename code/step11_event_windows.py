@@ -13,7 +13,7 @@ longer post-filing horizons?
 Inputs : output/panel.parquet  (must have excret_01, excret_03, excret_05,
                                 excret_10, excret_20 columns from step6)
 Outputs:
-    output/table_event_windows.csv   # one row per (window × spec × subperiod)
+    output/data_tables_figures/table_event_windows.csv   # one row per (window × spec × subperiod)
     output/table_event_windows.md    # pretty markdown summary
 """
 from __future__ import annotations
@@ -27,6 +27,8 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "output"
+DATA = OUT / "data_tables_figures"   # final tables + figures
+DATA.mkdir(parents=True, exist_ok=True)
 
 sys.path.insert(0, str(Path(__file__).parent))
 from step7_tables import fama_macbeth_quarterly  # noqa: E402
@@ -112,7 +114,7 @@ def main() -> None:
                       f"t={res['t']:+.2f}  adj_R2={res['adj_r2_avg']*100:.2f}%")
 
     out_df = pd.DataFrame(rows)
-    csv_path = OUT / "table_event_windows.csv"
+    csv_path = DATA / "table_event_windows.csv"
     out_df.to_csv(csv_path, index=False)
     print(f"\nWrote {csv_path.name}")
 

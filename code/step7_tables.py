@@ -11,9 +11,9 @@ Inputs:
   - output/panel.parquet (from step 6)
 
 Outputs:
-  - output/table2.csv
-  - output/table4_cols2_4.csv
-  - output/table5_cols2_4.csv
+  - output/data_tables_figures/table2.csv
+  - output/data_tables_figures/table4_cols2_4.csv
+  - output/data_tables_figures/table5_cols2_4.csv
   - output/replication_diagnostic.md
 """
 
@@ -33,6 +33,8 @@ warnings.filterwarnings("ignore", category=UserWarning, module="statsmodels")
 
 ROOT = Path(r"D:\lm2011-extension")
 OUT = ROOT / "output"
+DATA = OUT / "data_tables_figures"   # final tables + figures
+DATA.mkdir(parents=True, exist_ok=True)
 PANEL = OUT / "panel.parquet"
 
 
@@ -260,7 +262,7 @@ def main() -> None:
     print("=== Table II ===")
     t2 = build_table_2(p)
     try:
-        t2.to_csv(OUT / "table2.csv", index=False)
+        t2.to_csv(DATA / "table2.csv", index=False)
     except PermissionError:
         print("  WARN: table2.csv locked; skipping")
     print(t2.to_string(index=False))
@@ -269,7 +271,7 @@ def main() -> None:
     t4, t5 = build_tables_4_5(p)
     for name, df in [("table4_cols2_4.csv", t4), ("table5_cols2_4.csv", t5)]:
         try:
-            df.to_csv(OUT / name, index=False)
+            df.to_csv(DATA / name, index=False)
         except PermissionError:
             print(f"  WARN: {name} locked; skipping")
     print("\nTable IV (full text):")

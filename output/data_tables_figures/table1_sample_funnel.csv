@@ -10,4 +10,4 @@ step,rows
 09_NYSE_AMEX_NASDAQ,104086
 10_ge_60d_pre_AND_post,101589
 11_BM_avail_book_gt_0,96781
-12_Nwords_ge_2000,83422
+12_Nwords_ge_2000,96331
