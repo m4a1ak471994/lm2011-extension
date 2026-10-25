@@ -6,6 +6,14 @@ filing-period excess-return regression on a 5-year trailing window of
 filings filed in [t − 4, t]. Plot the Fin-Neg coefficient (and its 95 % CI)
 over time.
 
+Reported version: Fin-Neg is z-scored over each 5-year window's regression
+sample (after 1/99 % winsorizing), so the coefficient is the [0,+3] excess
+return in pp per one standard deviation of Fin-Neg in that window. This keeps
+the coefficients comparable across windows although the tf-idf scale drifts
+over time; as a constant rescaling within each window it leaves the t-stats
+and the controls unchanged. --raw writes the per-unit version (coefficient per
+one tf-idf point) to the *_raw files.
+
 Two parallel specifications are run:
   - fin_neg_tfidf_full : negative sentiment computed on the full 10-K text
   - fin_neg_tfidf_mda  : negative sentiment computed on the MD&A section only
@@ -16,6 +24,9 @@ Outputs:
     output/data_tables_figures/sentiment_decay_mda.csv           # MD&A rolling-window stats
     output/data_tables_figures/fig_sentiment_decay.png           # full-text decay plot
     output/data_tables_figures/fig_sentiment_decay_mda.png       # MD&A decay plot
+  with --raw: the same names with a _raw suffix (per-unit coefficients)
+
+Usage: python code/step10_decay.py [--raw]
 """
 from __future__ import annotations
 
@@ -58,7 +69,7 @@ SPECS = [
 ]
 
 
-def run_spec(p_full: pd.DataFrame, spec: dict) -> None:
+def run_spec(p_full: pd.DataFrame, spec: dict, standardize: bool) -> None:
     print(f"\n=== {spec['scope']} ({spec['sentiment_var']}) ===")
     p = p_full.copy()
     if spec["mdna_only"]:
@@ -79,7 +90,8 @@ def run_spec(p_full: pd.DataFrame, spec: dict) -> None:
             if sub.empty:
                 continue
             res = fit_one(sub, sentiment=spec["sentiment_var"],
-                          label=f"window_end_{ye}", with_ff48=True)
+                          label=f"window_end_{ye}", with_ff48=True,
+                          standardize_x=standardize)
             ci_lo = res["coef"] - 1.96 * res["se"] if res["se"] else np.nan
             ci_hi = res["coef"] + 1.96 * res["se"] if res["se"] else np.nan
             rows.append({
@@ -100,7 +112,8 @@ def run_spec(p_full: pd.DataFrame, spec: dict) -> None:
                   f"adj_R2={res['adj_r2_avg']*100:.2f}%")
 
     out_df = pd.DataFrame(rows)
-    csv_path = DATA / spec["csv_name"]
+    sfx = "" if standardize else "_raw"
+    csv_path = DATA / spec["csv_name"].replace(".csv", f"{sfx}.csv")
     out_df.to_csv(csv_path, index=False)
     print(f"  Wrote {csv_path.name}")
 
@@ -122,7 +135,9 @@ def run_spec(p_full: pd.DataFrame, spec: dict) -> None:
                 color="red", fontsize=9, va="top")
 
         ax.set_xlabel(f"Window end year (window = end_year − {WINDOW_LEN-1} to end_year)")
-        ax.set_ylabel("Fin-Neg tf-idf coefficient on excess return [0,+3] (%)")
+        ax.set_ylabel("Excess return [0,+3] (pp) per 1 SD of Fin-Neg tf-idf"
+                      if standardize else
+                      "Fin-Neg tf-idf coefficient on excess return [0,+3] (%)")
         ax.set_title(
             f"Predictive power of negative sentiment over time "
             f"({WINDOW_LEN}-year rolling window)\n{spec['scope']}"
@@ -134,7 +149,7 @@ def run_spec(p_full: pd.DataFrame, spec: dict) -> None:
         ax.grid(True, alpha=0.25)
         ax.legend(loc="lower right", framealpha=0.92)
         plt.tight_layout()
-        png_path = DATA / spec["png_name"]
+        png_path = DATA / spec["png_name"].replace(".png", f"{sfx}.png")
         plt.savefig(png_path, dpi=150)
         print(f"  Wrote {png_path.name}")
         plt.close(fig)
@@ -153,8 +168,10 @@ def main() -> None:
     print(f"  {len(p):,} rows after dropping pre-{YEAR_START_GLOBAL}  "
           f"(years {int(p['year'].min())}..{int(p['year'].max())})")
 
+    standardize = "--raw" not in sys.argv[1:]
+    print("Fin-Neg " + ("standardized within each 5-year window" if standardize else "per unit (raw)"))
     for spec in SPECS:
-        run_spec(p, spec)
+        run_spec(p, spec, standardize)
 
     print(f"\nDone. Elapsed: {(time.monotonic() - t0):.1f}s")
 

@@ -95,7 +95,7 @@ def build_table_2(p: pd.DataFrame) -> pd.DataFrame:
 def fama_macbeth_quarterly(d: pd.DataFrame, y: str, x_main: str,
                            controls: list[str], industry_col: str = "ff48",
                            nw_lags: int = 1, freq_weight: bool = False,
-                           ts_weight_by_n: bool = True) -> dict:
+                           ts_weight_by_n: bool = True, standardize_x: bool = False) -> dict:
     """
     LM (2011) page 52: Fama-MacBeth quarterly + Newey-West (1 lag) SE,
     "weighted by frequency, since the calendar distribution of file dates is
@@ -107,6 +107,10 @@ def fama_macbeth_quarterly(d: pd.DataFrame, y: str, x_main: str,
             Run WLS:  y_i = α_q + β_q · x_main_i + γ_q · controls + θ_q · ind_d + ε
             Save β_q
         β̄ = mean(β_q), SE_NW = Newey-West (1 lag) on β_q time series.
+    standardize_x: z-score x_main over the whole estimation sample passed in
+        (after winsorizing), so β̄ is the change in y per one SD of x_main in
+        that sample. A single constant rescaling: t-stats and the controls'
+        coefficients are identical to the unstandardized fit.
 
     Returns dict with coef, se, t, p, N, n_quarters, adj_r2_avg.
     """
@@ -120,6 +124,8 @@ def fama_macbeth_quarterly(d: pd.DataFrame, y: str, x_main: str,
     cont = [y, x_main] + [c for c in controls if c != "nasdaq"]
     for c in cont:
         d[c] = winsorize(d[c])
+    if standardize_x:
+        d[x_main] = (d[x_main] - d[x_main].mean()) / d[x_main].std()
 
     betas, ar2s, ns = [], [], []
     for q, g in d.groupby("yq"):
@@ -171,7 +177,7 @@ def fama_macbeth_quarterly(d: pd.DataFrame, y: str, x_main: str,
 
 
 def fit_one(p: pd.DataFrame, sentiment: str, label: str,
-            with_ff48: bool = True) -> dict:
+            with_ff48: bool = True, standardize_x: bool = False) -> dict:
     """LM (2011) Table IV / IA.I controls: 6 variables + (optional) FF48 FEs."""
     controls = [
         "log_size", "log_bm", "log_turnover",
@@ -187,7 +193,7 @@ def fit_one(p: pd.DataFrame, sentiment: str, label: str,
         industry_col = "_no_ind"
     res = fama_macbeth_quarterly(
         p, y="excret_03", x_main=sentiment, controls=controls,
-        industry_col=industry_col,
+        industry_col=industry_col, standardize_x=standardize_x,
     )
     res["label"] = label
     res["sentiment_var"] = sentiment

@@ -15,6 +15,11 @@ Inputs : output/panel.parquet  (must have excret_01, excret_03, excret_05,
 Outputs:
     output/data_tables_figures/table_event_windows.csv   # one row per (window × spec × subperiod)
     output/table_event_windows.md    # pretty markdown summary
+  with --long (robustness check, [0,+10] and [0,+20]):
+    output/data_tables_figures/table_event_windows_long.csv
+    output/table_event_windows_long.md
+
+Usage: python code/step11_event_windows.py [--long]
 """
 from __future__ import annotations
 
@@ -43,6 +48,11 @@ EVENT_WINDOWS = [
     # LHS is contaminated by drift, earnings surprises (other firms),
     # and macroeconomic news unrelated to the 10-K release.
 ]
+# Robustness check only (--long); reported separately with that caveat.
+LONG_WINDOWS = [
+    ("excret_10", "[0,+10]"),
+    ("excret_20", "[0,+20]"),
+]
 
 # Same subperiods as step9
 SUBPERIODS: list[tuple[str, int, int]] = [
@@ -64,6 +74,9 @@ def fit(d: pd.DataFrame, y: str, x_main: str) -> dict:
 
 def main() -> None:
     t0 = time.monotonic()
+    long = "--long" in sys.argv[1:]
+    windows = LONG_WINDOWS if long else EVENT_WINDOWS
+    suffix = "_long" if long else ""
     p = pd.read_parquet(OUT / "panel.parquet")
     p["date_filed"] = pd.to_datetime(p["date_filed"])
     print(f"Loaded panel.parquet  rows={len(p):,}  years {int(p['date_filed'].dt.year.min())}..{int(p['date_filed'].dt.year.max())}")
@@ -89,7 +102,7 @@ def main() -> None:
             sub = df_.loc[mask].copy()
             if sub.empty:
                 continue
-            for excret_col, lbl in EVENT_WINDOWS:
+            for excret_col, lbl in windows:
                 if excret_col not in sub.columns:
                     continue
                 res = fit(sub, y=excret_col, x_main=x_main)
@@ -114,16 +127,23 @@ def main() -> None:
                       f"t={res['t']:+.2f}  adj_R2={res['adj_r2_avg']*100:.2f}%")
 
     out_df = pd.DataFrame(rows)
-    csv_path = DATA / "table_event_windows.csv"
+    csv_path = DATA / f"table_event_windows{suffix}.csv"
     out_df.to_csv(csv_path, index=False)
     print(f"\nWrote {csv_path.name}")
 
     # Pretty markdown: one section per spec, table = subperiod × event_window
-    md_lines: list[str] = ["# Event-window robustness — extended sample (1994–2024)\n"]
-    md_lines.append(f"_Generated {time.strftime('%Y-%m-%d %H:%M:%S')}_  \n")
-    md_lines.append("Same Fama-MacBeth quarterly regression as in the headline,")
-    md_lines.append("re-fit for three LHS event-windows. Each cell shows `t-stat (adj R²)`.")
-    md_lines.append("The [0,+3] column is LM's canonical 4-day filing-period window.\n")
+    if long:
+        md_lines: list[str] = ["# Robustness check: longer event windows — extended sample (1994–2024)\n"]
+        md_lines.append(f"_Generated {time.strftime('%Y-%m-%d %H:%M:%S')}_  \n")
+        md_lines.append("Same Fama-MacBeth quarterly regression as in the headline, re-fit with")
+        md_lines.append("[0,+10] and [0,+20] excess returns. Each cell shows `t-stat (adj R²)`.")
+        md_lines.append("These horizons also absorb post-filing drift and unrelated news.\n")
+    else:
+        md_lines = ["# Event-window robustness — extended sample (1994–2024)\n"]
+        md_lines.append(f"_Generated {time.strftime('%Y-%m-%d %H:%M:%S')}_  \n")
+        md_lines.append("Same Fama-MacBeth quarterly regression as in the headline,")
+        md_lines.append("re-fit for three LHS event-windows. Each cell shows `t-stat (adj R²)`.")
+        md_lines.append("The [0,+3] column is LM's canonical 4-day filing-period window.\n")
 
     SPEC_TITLES = {
         "IV_col2_prop":     "Fin-Neg proportional, full 10-K text",
@@ -137,8 +157,8 @@ def main() -> None:
         if sub_df.empty:
             md_lines.append("_no rows_")
             continue
-        header = "| Subperiod (n_qtrs) | n (canonical) | " + " | ".join(w for _, w in EVENT_WINDOWS) + " |"
-        sep    = "|---|---:|" + "---:|" * len(EVENT_WINDOWS)
+        header = "| Subperiod (n_qtrs) | n (canonical) | " + " | ".join(w for _, w in windows) + " |"
+        sep    = "|---|---:|" + "---:|" * len(windows)
         md_lines.append(header)
         md_lines.append(sep)
         for sub_name, y0, y1 in SUBPERIODS:
@@ -148,7 +168,7 @@ def main() -> None:
             n_canon = int(sub_rows.iloc[0]["n_obs"])
             n_q = int(sub_rows.iloc[0]["n_quarters"])
             cells = []
-            for excret_col, _ in EVENT_WINDOWS:
+            for excret_col, _ in windows:
                 r = sub_rows[sub_rows["y"] == excret_col]
                 if r.empty:
                     cells.append("–")
@@ -157,7 +177,7 @@ def main() -> None:
                 cells.append(f"{r['t']:+.2f} ({r['adj_r2_avg']*100:.2f}%)")
             md_lines.append(f"| {sub_name} ({n_q}q) | {n_canon:,} | " + " | ".join(cells) + " |")
 
-    md_path = OUT / "table_event_windows.md"
+    md_path = OUT / f"table_event_windows{suffix}.md"
     md_path.write_text("\n".join(md_lines) + "\n", encoding="utf-8")
     print(f"Wrote {md_path.name}")
     print(f"\nDone. Elapsed: {(time.monotonic() - t0):.1f}s")

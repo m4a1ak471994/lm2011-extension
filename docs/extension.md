@@ -110,9 +110,10 @@ The sub-period analysis above partitions the sample into a handful of disjoint r
 The procedure indexes windows by their end year *y*. For each end year:
 
 1. Take the subset of the extended panel with `date_filed` in calendar years `[y − 4, y]` — a 5-year backward-looking window of filings, giving 5 × 4 = 20 quarterly cross-sections.
-2. Run the same Fama-MacBeth quarterly cross-sectional regression on Fin-Neg tf-idf with the standard control set (log size + log BM + log turnover + pre-event FF-α + IO + NASDAQ + FF48 industry FEs). Save the per-quarter Fin-Neg coefficient β_q.
-3. The window's reported coefficient is the time-series average β̄ across those ~20 quarterly βs, weighted by *n_obs/q*. The standard error is a Newey-West HAC (1 lag) on the β_q series. R² is the simple time-series average of per-quarter adjusted R².
-4. Increment the end year by one and repeat.
+2. Standardize Fin-Neg tf-idf over the window's regression sample (after 1/99 % winsorizing), so the coefficient is in pp of excess return per one SD of Fin-Neg in that window. The tf-idf scale drifts over time, and this keeps windows comparable; as a constant rescaling within each window it leaves the t-statistics unchanged.
+3. Run the same Fama-MacBeth quarterly cross-sectional regression on the standardized Fin-Neg tf-idf with the standard control set (log size + log BM + log turnover + pre-event FF-α + IO + NASDAQ + FF48 industry FEs). Save the per-quarter Fin-Neg coefficient β_q.
+4. The window's reported coefficient is the time-series average β̄ across those ~20 quarterly βs, weighted by *n_obs/q*. The standard error is a Newey-West HAC (1 lag) on the β_q series. R² is the simple time-series average of per-quarter adjusted R².
+5. Increment the end year by one and repeat.
 
 Pre-1994 filings are excluded entirely. EDGAR was launched in May 1993 and mandatory electronic filing only phased in by May 1996; the manifest contains just 6 raw 10-K filings for calendar-year 1993, of which 2 survive the sample funnel. Aligning the window's earliest year with LM (2011)'s own sample-start convention means the first window has end year `1998` (covering filings 1994–1998); the last window has end year `2024` (covering 2020–2024). That gives 27 windows in total.
 
@@ -126,35 +127,35 @@ A caveat for the late windows: the end year *y* requires CRSP daily coverage aft
 
 (*plot file*: `output/data_tables_figures/fig_sentiment_decay.png`; underlying CSV: `output/data_tables_figures/sentiment_decay.csv`)
 
-| End year | Window | n | Coef | t-stat | adj R² |
+| End year | Window | n | Coef (pp per SD) | t-stat | adj R² |
 |---:|---|---:|---:|---:|---:|
-| 1998 | 1994–1998 | 14,849 | −0.0090 | −1.78 | 1.46 % |
-| 1999 | 1995–1999 | 17,915 | −0.0082 | −1.87 | 0.75 % |
-| 2000 | 1996–2000 | 20,258 | −0.0169 | −2.58 | 1.70 % |
-| 2001 | 1997–2001 | 20,966 | −0.0250 | −3.35 | 2.84 % |
-| 2002 | 1998–2002 | 19,862 | −0.0243 | −3.07 | 2.67 % |
-| 2003 | 1999–2003 | 18,662 | −0.0222 | −2.68 | 3.24 % |
-| 2004 | 2000–2004 | 17,990 | −0.0236 | −2.72 | 4.09 % |
-| 2005 | 2001–2005 | 17,226 | −0.0133 | −1.93 | 3.43 % |
-| 2006 | 2002–2006 | 17,043 | −0.0023 | −0.84 | 1.82 % |
-| 2007 | 2003–2007 | 17,063 | −0.0001 | −0.03 | 2.42 % |
-| 2008 | 2004–2008 | 17,170 | −0.0002 | −0.04 | 2.68 % |
-| 2009 | 2005–2009 | 16,387 | −0.0026 | −0.64 | 2.87 % |
-| 2010 | 2006–2010 | 16,009 | +0.0006 | +0.11 | 3.66 % |
-| 2011 | 2007–2011 | 15,594 | +0.0005 | +0.10 | 4.40 % |
-| 2012 | 2008–2012 | 15,011 | −0.0004 | −0.09 | 4.36 % |
-| 2013 | 2009–2013 | 14,450 | −0.0002 | −0.04 | 4.38 % |
-| 2014 | 2010–2014 | 14,639 | +0.0040 | +1.05 | 4.42 % |
-| 2015 | 2011–2015 | 14,526 | +0.0022 | +0.73 | 4.84 % |
-| 2016 | 2012–2016 | 14,314 | −0.0010 | −0.27 | 5.49 % |
-| 2017 | 2013–2017 | 14,172 | +0.0025 | +0.61 | 6.32 % |
-| 2018 | 2014–2018 | 13,897 | +0.0029 | +0.76 | 8.19 % |
-| 2019 | 2015–2019 | 13,525 | +0.0061 | +1.20 | 7.78 % |
-| 2020 | 2016–2020 | 13,062 | +0.0027 | +0.47 | 5.96 % |
-| 2021 | 2017–2021 | 13,176 | +0.0014 | +0.23 | 5.45 % |
-| 2022 | 2018–2022 | 13,489 | −0.0013 | −0.22 | 4.88 % |
-| 2023 | 2019–2023 | 13,676 | −0.0025 | −0.41 | 3.46 % |
-| 2024 | 2020–2024 | 13,641 | −0.0059 | −1.48 | 3.51 % |
+| 1998 | 1994–1998 | 14,849 | −0.085 | −1.78 | 1.46 % |
+| 1999 | 1995–1999 | 17,915 | −0.079 | −1.87 | 0.75 % |
+| 2000 | 1996–2000 | 20,258 | −0.167 | −2.58 | 1.70 % |
+| 2001 | 1997–2001 | 20,966 | −0.252 | −3.35 | 2.84 % |
+| 2002 | 1998–2002 | 19,862 | −0.261 | −3.07 | 2.67 % |
+| 2003 | 1999–2003 | 18,662 | −0.260 | −2.68 | 3.24 % |
+| 2004 | 2000–2004 | 17,990 | −0.297 | −2.72 | 4.09 % |
+| 2005 | 2001–2005 | 17,226 | −0.178 | −1.93 | 3.43 % |
+| 2006 | 2002–2006 | 17,043 | −0.032 | −0.84 | 1.82 % |
+| 2007 | 2003–2007 | 17,063 | −0.001 | −0.03 | 2.42 % |
+| 2008 | 2004–2008 | 17,170 | −0.002 | −0.04 | 2.68 % |
+| 2009 | 2005–2009 | 16,387 | −0.039 | −0.64 | 2.87 % |
+| 2010 | 2006–2010 | 16,009 | +0.009 | +0.11 | 3.66 % |
+| 2011 | 2007–2011 | 15,594 | +0.008 | +0.10 | 4.40 % |
+| 2012 | 2008–2012 | 15,011 | −0.007 | −0.09 | 4.36 % |
+| 2013 | 2009–2013 | 14,450 | −0.003 | −0.04 | 4.38 % |
+| 2014 | 2010–2014 | 14,639 | +0.065 | +1.05 | 4.42 % |
+| 2015 | 2011–2015 | 14,526 | +0.037 | +0.73 | 4.84 % |
+| 2016 | 2012–2016 | 14,314 | −0.018 | −0.27 | 5.49 % |
+| 2017 | 2013–2017 | 14,172 | +0.044 | +0.61 | 6.32 % |
+| 2018 | 2014–2018 | 13,897 | +0.053 | +0.76 | 8.19 % |
+| 2019 | 2015–2019 | 13,525 | +0.117 | +1.20 | 7.78 % |
+| 2020 | 2016–2020 | 13,062 | +0.055 | +0.47 | 5.96 % |
+| 2021 | 2017–2021 | 13,176 | +0.031 | +0.23 | 5.45 % |
+| 2022 | 2018–2022 | 13,489 | −0.031 | −0.22 | 4.88 % |
+| 2023 | 2019–2023 | 13,676 | −0.062 | −0.41 | 3.46 % |
+| 2024 | 2020–2024 | 13,641 | −0.149 | −1.48 | 3.51 % |
 
 The full-text coefficient is negative and significant (t below −2) only for end years 2000–2004. The 1998–1999 windows are borderline, and the long stretch from end year 2006 through 2024 oscillates sign with t-stats between −1.5 and +1.2 — economically indistinguishable from zero.
 
@@ -164,35 +165,35 @@ The full-text coefficient is negative and significant (t below −2) only for en
 
 (*plot file*: `output/data_tables_figures/fig_sentiment_decay_mda.png`; underlying CSV: `output/data_tables_figures/sentiment_decay_mda.csv`)
 
-| End year | Window | n | Coef | t-stat | adj R² |
+| End year | Window | n | Coef (pp per SD) | t-stat | adj R² |
 |---:|---|---:|---:|---:|---:|
-| 1998 | 1994–1998 | 13,452 | −0.0226 | −3.22 | 1.81 % |
-| 1999 | 1995–1999 | 16,391 | −0.0133 | −1.71 | 0.91 % |
-| 2000 | 1996–2000 | 18,724 | −0.0212 | −2.49 | 1.85 % |
-| 2001 | 1997–2001 | 19,545 | −0.0302 | −2.93 | 3.00 % |
-| 2002 | 1998–2002 | 18,693 | −0.0272 | −2.50 | 2.75 % |
-| 2003 | 1999–2003 | 17,734 | −0.0232 | −2.09 | 3.06 % |
-| 2004 | 2000–2004 | 17,252 | −0.0277 | −3.07 | 3.96 % |
-| 2005 | 2001–2005 | 16,665 | −0.0165 | −1.95 | 3.24 % |
-| 2006 | 2002–2006 | 16,633 | −0.0055 | −1.68 | 1.56 % |
-| 2007 | 2003–2007 | 16,759 | −0.0037 | −1.57 | 2.04 % |
-| 2008 | 2004–2008 | 16,948 | −0.0046 | −2.01 | 2.38 % |
-| 2009 | 2005–2009 | 16,220 | −0.0053 | −1.88 | 2.63 % |
-| 2010 | 2006–2010 | 15,866 | −0.0058 | −1.96 | 3.47 % |
-| 2011 | 2007–2011 | 15,464 | −0.0042 | −1.28 | 4.08 % |
-| 2012 | 2008–2012 | 14,893 | −0.0035 | −1.13 | 4.12 % |
-| 2013 | 2009–2013 | 14,345 | −0.0054 | −1.60 | 4.15 % |
-| 2014 | 2010–2014 | 14,541 | −0.0049 | −1.56 | 4.19 % |
-| 2015 | 2011–2015 | 14,442 | −0.0059 | −1.89 | 4.62 % |
-| 2016 | 2012–2016 | 14,234 | −0.0051 | −1.44 | 5.42 % |
-| 2017 | 2013–2017 | 14,094 | −0.0038 | −1.12 | 6.36 % |
-| 2018 | 2014–2018 | 13,813 | −0.0036 | −0.89 | 8.05 % |
-| 2019 | 2015–2019 | 13,441 | −0.0022 | −0.51 | 7.55 % |
-| 2020 | 2016–2020 | 12,977 | −0.0069 | −1.36 | 5.90 % |
-| 2021 | 2017–2021 | 13,092 | −0.0068 | −1.34 | 5.54 % |
-| 2022 | 2018–2022 | 13,403 | −0.0052 | −0.99 | 4.80 % |
-| 2023 | 2019–2023 | 13,588 | −0.0043 | −0.86 | 3.58 % |
-| 2024 | 2020–2024 | 13,553 | −0.0053 | −1.23 | 3.19 % |
+| 1998 | 1994–1998 | 13,452 | −0.153 | −3.22 | 1.81 % |
+| 1999 | 1995–1999 | 16,391 | −0.099 | −1.71 | 0.91 % |
+| 2000 | 1996–2000 | 18,724 | −0.175 | −2.49 | 1.85 % |
+| 2001 | 1997–2001 | 19,545 | −0.270 | −2.93 | 3.00 % |
+| 2002 | 1998–2002 | 18,693 | −0.278 | −2.50 | 2.75 % |
+| 2003 | 1999–2003 | 17,734 | −0.273 | −2.09 | 3.06 % |
+| 2004 | 2000–2004 | 17,252 | −0.370 | −3.07 | 3.96 % |
+| 2005 | 2001–2005 | 16,665 | −0.244 | −1.95 | 3.24 % |
+| 2006 | 2002–2006 | 16,633 | −0.080 | −1.68 | 1.56 % |
+| 2007 | 2003–2007 | 16,759 | −0.052 | −1.57 | 2.04 % |
+| 2008 | 2004–2008 | 16,948 | −0.062 | −2.01 | 2.38 % |
+| 2009 | 2005–2009 | 16,220 | −0.068 | −1.88 | 2.63 % |
+| 2010 | 2006–2010 | 15,866 | −0.066 | −1.96 | 3.47 % |
+| 2011 | 2007–2011 | 15,464 | −0.050 | −1.28 | 4.08 % |
+| 2012 | 2008–2012 | 14,893 | −0.043 | −1.13 | 4.12 % |
+| 2013 | 2009–2013 | 14,345 | −0.068 | −1.60 | 4.15 % |
+| 2014 | 2010–2014 | 14,541 | −0.061 | −1.56 | 4.19 % |
+| 2015 | 2011–2015 | 14,442 | −0.073 | −1.89 | 4.62 % |
+| 2016 | 2012–2016 | 14,234 | −0.066 | −1.44 | 5.42 % |
+| 2017 | 2013–2017 | 14,094 | −0.051 | −1.12 | 6.36 % |
+| 2018 | 2014–2018 | 13,813 | −0.051 | −0.89 | 8.05 % |
+| 2019 | 2015–2019 | 13,441 | −0.033 | −0.51 | 7.55 % |
+| 2020 | 2016–2020 | 12,977 | −0.105 | −1.36 | 5.90 % |
+| 2021 | 2017–2021 | 13,092 | −0.098 | −1.34 | 5.54 % |
+| 2022 | 2018–2022 | 13,403 | −0.081 | −0.99 | 4.80 % |
+| 2023 | 2019–2023 | 13,588 | −0.071 | −0.86 | 3.58 % |
+| 2024 | 2020–2024 | 13,553 | −0.095 | −1.23 | 3.19 % |
 
 The MD&A coefficient is negative in every one of the 27 windows. Statistical significance (|t| ≥ 1.96) is concentrated in 1998, 2000–2004, 2008 and 2010, with marginal significance (|t| between 1.5 and 1.96) holding for many of the post-2005 windows. The qualitative contrast with the full-text panel above is the headline finding: where the full-text signal decays and oscillates sign post-2005, the MD&A signal weakens in magnitude but stays directionally consistent throughout.
 
@@ -243,6 +244,24 @@ Three patterns emerge:
 2. **The decay is most visible in the very-short windows.** For the `post_LM` and `algo_era` sub-periods, the `[0,+1]` and `[0,+3]` t-statistics on full-text tf-idf cluster near zero or flip sign. If markets price negative tone faster post-2010 than they did in the 1990s, the short-window absence of signal is consistent with that.
 
 3. **MD&A tf-idf is the most window-stable.** For the MD&A-only spec, the full extended sample shows `t = −3.09 / −3.97 / −2.74` across `[0,+1] / [0,+3] / [0,+5]`. The negative sign also persists in MD&A across most sub-periods at the canonical `[0,+3]` window. The robustness reflects that MD&A text — forward-looking commentary by management — carries information that is priced over a longer post-filing horizon than mechanical text features in the rest of the 10-K.
+
+
+### Robustness check: longer windows `[0,+10]` and `[0,+20]`
+
+These horizons are reported only as a robustness check: over two to four weeks the excess return also absorbs post-filing drift, other firms' news and macroeconomic news unrelated to the 10-K. The regression is otherwise identical. Each cell shows `t (adj R²)`; the `[0,+3]` and `[0,+5]` columns repeat the t-stats from the main event-window table for comparison. Sub-period results are in `output/table_event_windows_long.md`.
+
+| Specification | Subperiod | [0,+3] | [0,+5] | [0,+10] | [0,+20] |
+|---|---|---:|---:|---:|---:|
+| Proportional, full text | LM_in_sample | −3.04 | −2.45 | −1.24 (3.82 %) | +0.13 (5.77 %) |
+| Proportional, full text | full | −1.86 | −1.65 | −0.42 (5.20 %) | +0.11 (6.93 %) |
+| tf-idf, full text | LM_in_sample | −2.74 | −2.23 | −1.37 (3.96 %) | −0.45 (5.99 %) |
+| tf-idf, full text | full | −1.83 | −1.71 | −0.84 (5.36 %) | −0.85 (7.07 %) |
+| Proportional, MD&A | LM_in_sample | −3.54 | −3.07 | −2.37 (3.79 %) | −1.59 (5.57 %) |
+| Proportional, MD&A | full | −2.46 | −1.50 | −1.11 (5.07 %) | −0.41 (6.70 %) |
+| tf-idf, MD&A | LM_in_sample | −3.56 | −3.02 | −2.17 (3.86 %) | −1.22 (5.60 %) |
+| tf-idf, MD&A | full | −3.97 | −2.74 | −1.73 (5.12 %) | −1.08 (6.65 %) |
+
+Significance fades as the window lengthens: in the LM in-sample period only the MD&A specifications remain significant at the 5 % level at `[0,+10]`, and none is at `[0,+20]`; in the full extended sample none is significant at the 5 % level at either horizon (MD&A tf-idf is significant at 10 % at `[0,+10]`). The point estimates mostly do not shrink: for the MD&A specifications and full-text tf-idf at `[0,+10]` they stay close to their `[0,+3]` values, while standard errors rise two- to threefold as the longer windows add return variation unrelated to the filing. The `[0,+3]` reaction is therefore not reversed over the following month, and there is no evidence of additional drift; the full-text proportional coefficient is the exception, turning slightly positive at `[0,+20]`.
 
 ---
 
