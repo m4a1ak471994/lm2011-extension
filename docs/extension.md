@@ -195,13 +195,13 @@ The full-text coefficient is negative and significant (t below −2) only for en
 | 2023 | 2019–2023 | 13,588 | −0.071 | −0.86 | 3.58 % |
 | 2024 | 2020–2024 | 13,553 | −0.095 | −1.23 | 3.19 % |
 
-The MD&A coefficient is negative in every one of the 27 windows. Statistical significance (|t| ≥ 1.96) is concentrated in 1998, 2000–2004, 2008 and 2010, with marginal significance (|t| between 1.5 and 1.96) holding for many of the post-2005 windows. The qualitative contrast with the full-text panel above is the headline finding: where the full-text signal decays and oscillates sign post-2005, the MD&A signal weakens in magnitude but stays directionally consistent throughout.
+The MD&A coefficient is negative in every one of the 27 windows. Statistical significance (|t| ≥ 1.96) is concentrated in 1998, 2000–2004, 2008 and 2010, with many post-2005 estimates falling short of conventional significance thresholds. The qualitative contrast with the full-text panel above is the headline finding: where the full-text signal decays and oscillates sign post-2005, the MD&A signal weakens in magnitude but stays directionally consistent throughout.
 
 ---
 
 ## Event-window robustness
 
-LM (2011) defines its CAR over a four-day window `[0, +3]` covering the filing day plus three subsequent trading days. To check whether the result is special to that window, each subperiod regression is re-fit with three LHS event windows: `[0,+1]`, `[0,+3]` (LM canonical), `[0,+5]`. (Longer horizons of `[0,+10]` / `[0,+20]` were considered but excluded — at two-to-four-week horizons the LHS is contaminated by drift, by other firms' earnings surprises, and by macroeconomic news unrelated to the 10-K release, so the regression no longer cleanly identifies a filing-period effect.) Each cell below shows `t (adj R²)`.
+LM (2011) defines its CAR over a four-day window `[0, +3]` covering the filing day plus three subsequent trading days. To check whether the result is special to that window, each subperiod regression is re-fit with three LHS event windows: `[0,+1]`, `[0,+3]` (LM canonical), `[0,+5]`. Longer horizons, `[0,+10]` and `[0,+20]`, are reported separately below because they also capture returns driven by events after the filing. Each cell below shows `t (adj R²)`.
 
 ### Full 10-K text
 
@@ -261,7 +261,7 @@ These horizons are reported only as a robustness check: over two to four weeks t
 | tf-idf, MD&A | LM_in_sample | −3.56 | −3.02 | −2.17 (3.86 %) | −1.22 (5.60 %) |
 | tf-idf, MD&A | full | −3.97 | −2.74 | −1.73 (5.12 %) | −1.08 (6.65 %) |
 
-Significance fades as the window lengthens: in the LM in-sample period only the MD&A specifications remain significant at the 5 % level at `[0,+10]`, and none is at `[0,+20]`; in the full extended sample none is significant at the 5 % level at either horizon (MD&A tf-idf is significant at 10 % at `[0,+10]`). The point estimates mostly do not shrink: for the MD&A specifications and full-text tf-idf at `[0,+10]` they stay close to their `[0,+3]` values, while standard errors rise two- to threefold as the longer windows add return variation unrelated to the filing. The `[0,+3]` reaction is therefore not reversed over the following month, and there is no evidence of additional drift; the full-text proportional coefficient is the exception, turning slightly positive at `[0,+20]`.
+Significance fades as the window lengthens: in the LM in-sample period only the MD&A specifications remain significant at the 5 % level at `[0,+10]`, and none is at `[0,+20]`; in the full extended sample none is significant at the 5 % level at either horizon (MD&A tf-idf is significant at 10 % at `[0,+10]`). The point estimates mostly do not shrink: for the MD&A specifications and full-text tf-idf at `[0,+10]` they stay close to their `[0,+3]` values, while standard errors rise two- to threefold as the longer windows add return variation unrelated to the filing. These cumulative-return regressions do not separately test drift or reversal after the initial filing response. That would require regressions on returns after day +3 or a joint test of the differences between horizons.
 
 ---
 

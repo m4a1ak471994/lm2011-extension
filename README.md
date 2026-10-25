@@ -68,11 +68,11 @@ Three patterns from the event-window robustness section in [`docs/extension.md`]
 
 ![Predictive power of negative sentiment over time — full 10-K text](output/data_tables_figures/fig_sentiment_decay.png)
 
-This figure plots the Fin-Neg tf-idf coefficient from a rolling 5-year Fama-MacBeth regression on the full 10-K text, indexed by the window's end year. The coefficient is significantly negative through about 2005 — the original LM sample — and drifts toward zero afterward, broadly consistent with the post-publication arbitrage of published anomalies documented by McLean and Pontiff (2016).
+This figure shows the association between full-text negative tone and filing-period excess returns in rolling five-year Fama-MacBeth regressions. Within each window, the TF-IDF score is standardized after winsorizing at the 1st and 99th percentiles. The coefficient measures the difference in excess return, in percentage points, associated with a one-standard-deviation increase in negative tone. The shaded band is a 95% confidence interval. The negative association is strongest in windows ending in the early 2000s and weakens before the paper's publication.
 
 ![Predictive power of negative sentiment over time — MD&A section only](output/data_tables_figures/fig_sentiment_decay_mda.png)
 
-The MD&A-only version of the same regression tells a more stable story: after the strong pre-2005 effect, the coefficient stays mildly negative throughout the post-2005 period rather than drifting all the way to zero. This is consistent with managerial tone in MD&A continuing to convey priceable information even after the broader full-text signal is largely arbitraged away.
+The MD&A figure uses the same design, standardizing the MD&A TF-IDF score within each window. Its coefficient remains negative throughout, but most later confidence intervals include zero. The direction is more consistent than for full text; the evidence for a continuing association is less precise.
 
 See [`docs/extension.md`](docs/extension.md) for the full writeup, including the sub-period replication table, event-window robustness across [0,+1] / [0,+3] / [0,+5], and three candidate mechanisms for the early-2000s signal vanishing (pre-publication discovery, post-SOX disclosure-norm shift, algorithmic pricing of public text).
 
