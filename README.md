@@ -68,7 +68,7 @@ Three patterns from the event-window robustness section in [`docs/extension.md`]
 
 ![Predictive power of negative sentiment over time — full 10-K text](output/data_tables_figures/fig_sentiment_decay.png)
 
-This figure shows the association between full-text negative tone and filing-period excess returns in rolling five-year Fama-MacBeth regressions. Within each window, the TF-IDF score is standardized after winsorizing at the 1st and 99th percentiles. The coefficient measures the difference in excess return, in percentage points, associated with a one-standard-deviation increase in negative tone. The shaded band is a 95% confidence interval. The negative association is strongest in windows ending in the early 2000s and weakens before the paper's publication.
+This figure plots the coefficient on the standardized full-text Fin-Neg TF-IDF score from rolling five-year Fama-MacBeth regressions of filing-period excess returns. Within each window, the TF-IDF score is standardized after winsorizing at the 1st and 99th percentiles. The coefficient measures the difference in excess return, in percentage points, associated with a one-standard-deviation increase in negative tone. The shaded band is a 95% confidence interval. The negative association is strongest in windows ending in the early 2000s and weakens before the paper's publication.
 
 ![Predictive power of negative sentiment over time — MD&A section only](output/data_tables_figures/fig_sentiment_decay_mda.png)
 
